@@ -13,6 +13,7 @@ namespace YoavShop.Models
         public string Description { get; set; }
         public int Price { get; set; }
         public int ProductCategorieId { get; set; }
+        [ForeignKey("Supplier")]
         public int SupplierId { get; set; }
 
         public virtual ProductCategorie ProductCategorie { get; set; }

@@ -15,7 +15,7 @@ namespace YoavShop.DAL
             {
                 new Supplier()
                 {
-                    Id = 1,
+                    UserId = 1,
                         CardNumber = 123123123,
                         ExiprationMounth = 12,
                         ExiprationYear = 2000,
@@ -24,7 +24,7 @@ namespace YoavShop.DAL
                 },
                 new Supplier()
                 {
-                    Id = 2,
+                    UserId = 2,
 
                         CardNumber = 1111111,
                         ExiprationMounth = 12,
@@ -40,7 +40,7 @@ namespace YoavShop.DAL
             {
                 new Customer()
                 {
-                    Id = 1,
+                    UserId = 1,
 
                         CardNumber = 1111111,
                         ExiprationMounth = 12,

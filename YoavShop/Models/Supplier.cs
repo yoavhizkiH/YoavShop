@@ -9,8 +9,6 @@ namespace YoavShop.Models
 {
     public class Supplier : UserInfo
     {
-        [Key]
-        public int Id { get; set; }
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Transaction> Sellings { get; set; }
     }

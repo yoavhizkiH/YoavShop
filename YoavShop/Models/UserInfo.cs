@@ -8,6 +8,10 @@ namespace YoavShop.Models
 {
     public class UserInfo 
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserId { get; set; }
+
         [Column(TypeName = "VARCHAR")]
         [StringLength(10)]
         [Index(IsUnique = true)]

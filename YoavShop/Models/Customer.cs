@@ -8,7 +8,6 @@ namespace YoavShop.Models
 {
     public class Customer : UserInfo
     {
-        public int Id { get; set; }
         public virtual ICollection<Transaction> Buyings{ get; set; }
     }
 }
