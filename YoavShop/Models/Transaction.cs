@@ -12,5 +12,7 @@ namespace YoavShop.Models
         public int CustomerId { get; set; }
         public int MoneyPaid { get; set; }
         public DateTime TimeStamp { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

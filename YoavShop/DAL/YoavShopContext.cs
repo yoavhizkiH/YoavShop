@@ -10,8 +10,8 @@ namespace YoavShop.DAL
 {
     public class YoavShopContext : DbContext
     {
-        public DbSet<CreditCard> CreditCards { get; set; }
-        public DbSet<UserInfo> UserInfos { get; set; }
+        //public DbSet<CreditCard> CreditCards { get; set; }
+        //public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<ProductCategorie> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }

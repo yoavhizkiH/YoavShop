@@ -18,7 +18,7 @@ namespace YoavShop.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = db.Customers.Include(c => c.UserInfo);
+            var customers = db.Customers;
             return View(customers.ToList());
         }
 
@@ -40,7 +40,7 @@ namespace YoavShop.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-            ViewBag.UserInfoId = new SelectList(db.UserInfos, "Id", "UserName");
+            //ViewBag.Id = new SelectList(db.s, "Id", "UserName");
             return View();
         }
 
@@ -49,16 +49,24 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserInfoId")] Customer customer)
+        public ActionResult Create([Bind(Include = "UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")]Customer customer)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Customers.Add(customer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    //db.CreditCards.Add(creditCard);
+                    //customer.CreditCard = creditCard;
+                    db.Customers.Add(customer);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (DataException dex)
+            {
+                ModelState.AddModelError("", $"Unable to save changes. Try again, and if the problem persists see your system administrator. {dex.Message}");
             }
 
-            ViewBag.UserInfoId = new SelectList(db.UserInfos, "Id", "UserName", customer.UserInfoId);
             return View(customer);
         }
 
@@ -74,7 +82,6 @@ namespace YoavShop.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserInfoId = new SelectList(db.UserInfos, "Id", "UserName", customer.UserInfoId);
             return View(customer);
         }
 
@@ -83,15 +90,16 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserInfoId")] Customer customer)
+        public ActionResult Edit([Bind(Include = "Id,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Customer customer)
         {
             if (ModelState.IsValid)
             {
+                //db.Entry(creditCard).State = EntityState.Modified;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UserInfoId = new SelectList(db.UserInfos, "Id", "UserName", customer.UserInfoId);
+
             return View(customer);
         }
 

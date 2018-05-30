@@ -7,75 +7,79 @@ using YoavShop.Models;
 
 namespace YoavShop.DAL
 {
-    public class StoreInitializer : DropCreateDatabaseAlways<YoavShopContext>
+    public class YoavShopInitializer : DropCreateDatabaseAlways<YoavShopContext>
     {
         protected override void Seed(YoavShopContext context)
         {
-            var creditCards = new List<CreditCard>()
+            /*var creditCards = new List<CreditCard>()
             {
                 new CreditCard()
                 {
-                    Id = 1,
                     CardNumber = 123123123,
                     ExiprationMounth = 12,
                     ExiprationYear = 2000
                 },
                 new CreditCard()
                 {
-                    Id = 2,
+                    CardNumber = 1111111,
+                    ExiprationMounth = 12,
+                    ExiprationYear = 2000
+                },
+                new CreditCard()
+                {
                     CardNumber = 1111111,
                     ExiprationMounth = 12,
                     ExiprationYear = 2000
                 }
-            };
-            context.CreditCards.AddRange(creditCards);
-
-            var UserInfos = new List<UserInfo>()
-            {
-                new UserInfo()
-                {
-                    Id = 1,
-                    CreditCardId = 1,
-                    UserName = "YoavSup"
-                },
-                new UserInfo()
-                {
-                    Id = 2,
-                    CreditCardId = 2,
-                    UserName = "AsafSup"
-                },
-                new UserInfo()
-                {
-                    Id = 3,
-                    CreditCardId = 3,
-                    UserName = "Cust"
-                }
-            };
-            context.UserInfos.AddRange(UserInfos);
+            };*/
+            //context.CreditCards.AddRange(creditCards);
+            //context.SaveChanges();
 
             var Suppliers = new List<Supplier>()
             {
                 new Supplier()
                 {
                     Id = 1,
-                    UserInfoId = 1
+                        CardNumber = 123123123,
+                        ExiprationMounth = 12,
+                        ExiprationYear = 2000,
+                                        UserName = "YoavSup",
+                        Password = "123"
+                    //UserInfoId = 1
                 },
                 new Supplier()
                 {
-                    Id = 1,
-                    UserInfoId = 2
+                    Id = 2,
+
+                        CardNumber = 1111111,
+                        ExiprationMounth = 12,
+                        ExiprationYear = 2000,
+                        UserName = "AsafSup",
+                        Password = "123"
+                    
+                    //UserInfoId = 2
                 }
             };
             context.Suppliers.AddRange(Suppliers);
+            context.SaveChanges();
 
             var customers = new List<Customer>()
             {
                 new Customer()
                 {
-                    UserInfoId = 3
+                    Id = 1,
+
+                        CardNumber = 1111111,
+                        ExiprationMounth = 12,
+                        ExiprationYear = 2000,
+                        UserName = "Cust",
+                        Password = "123"
+                    
+                    //UserInfoId = 3
                 }
             };
             context.Customers.AddRange(customers);
+            context.SaveChanges();
 
             var categories = new List<ProductCategorie>()
             {
@@ -91,6 +95,7 @@ namespace YoavShop.DAL
                 }
             };
             context.ProductCategories.AddRange(categories);
+            context.SaveChanges();
 
             var Products = new List<Product>()
             {
@@ -105,6 +110,7 @@ namespace YoavShop.DAL
                 }
             };
             context.Products.AddRange(Products);
+            context.SaveChanges();
 
             var transactions = new List<Transaction>()
             {
