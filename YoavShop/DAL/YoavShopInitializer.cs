@@ -11,30 +11,6 @@ namespace YoavShop.DAL
     {
         protected override void Seed(YoavShopContext context)
         {
-            /*var creditCards = new List<CreditCard>()
-            {
-                new CreditCard()
-                {
-                    CardNumber = 123123123,
-                    ExiprationMounth = 12,
-                    ExiprationYear = 2000
-                },
-                new CreditCard()
-                {
-                    CardNumber = 1111111,
-                    ExiprationMounth = 12,
-                    ExiprationYear = 2000
-                },
-                new CreditCard()
-                {
-                    CardNumber = 1111111,
-                    ExiprationMounth = 12,
-                    ExiprationYear = 2000
-                }
-            };*/
-            //context.CreditCards.AddRange(creditCards);
-            //context.SaveChanges();
-
             var Suppliers = new List<Supplier>()
             {
                 new Supplier()
@@ -45,7 +21,6 @@ namespace YoavShop.DAL
                         ExiprationYear = 2000,
                                         UserName = "YoavSup",
                         Password = "123"
-                    //UserInfoId = 1
                 },
                 new Supplier()
                 {
@@ -56,8 +31,6 @@ namespace YoavShop.DAL
                         ExiprationYear = 2000,
                         UserName = "AsafSup",
                         Password = "123"
-                    
-                    //UserInfoId = 2
                 }
             };
             context.Suppliers.AddRange(Suppliers);
@@ -74,8 +47,6 @@ namespace YoavShop.DAL
                         ExiprationYear = 2000,
                         UserName = "Cust",
                         Password = "123"
-                    
-                    //UserInfoId = 3
                 }
             };
             context.Customers.AddRange(customers);
