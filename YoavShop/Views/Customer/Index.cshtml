@@ -1,43 +1,49 @@
-﻿@model IEnumerable<YoavShop.Models.Customer>
-
+﻿@model PagedList.IPagedList<YoavShop.Models.Customer>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Customers";
 }
 
-<h2>Index</h2>
+<h2>Customers</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm("Index", "Customer", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <table class="table">
     <tr>
-
-        <th></th>
-    </tr>
-    <tr>
         <th>
-            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParm })
+            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm })
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("User Name", "Index", new { sortOrder = ViewBag.UserNameSortParm })
+            @Html.ActionLink("User Name", "Index", new { sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Password)
+            Password
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CardNumber)
+            CardNumber
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ExiprationYear)
+            ExiprationYear
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ExiprationMounth)
+            ExiprationMounth
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Buyings)
+            Buyings
         </th>
         <th></th>
     </tr>
@@ -70,11 +76,16 @@
                 @Html.DisplayFor(modelItem => item.Buyings.Count)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = item.UserId}) |
-                @Html.ActionLink("Details", "Details", new {id = item.UserId}) |
-                @Html.ActionLink("Delete", "Delete", new {id = item.UserId})
+                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
             </td>
         </tr>
     }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using PagedList;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -16,12 +16,31 @@ namespace YoavShop.Controllers
         private YoavShopContext db = new YoavShopContext();
 
         // GET: Customers
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.FirstNameSortParm = string.IsNullOrEmpty(sortOrder) ? "FirstName_desc" : "";
             ViewBag.LastNameSortParm = sortOrder == "LastName" ? "LastName_desc" : "LastName";
             ViewBag.UserNameSortParm = sortOrder == "UserName" ? "UserName_desc" : "UserName";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
             var customers = from customer in db.Customers select customer;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                customers = customers.Where(customer => customer.LastName.Contains(searchString)
+                || customer.FirstName.Contains(searchString) || customer.UserName.Contains(searchString));
+            }
+
             switch (sortOrder)
             {
                 case "FirstName_desc":
@@ -43,7 +62,9 @@ namespace YoavShop.Controllers
                     customers = customers.OrderBy(s => s.FirstName);
                     break;
             }
-            return View(customers.ToList());
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(customers.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Customers/Details/5
