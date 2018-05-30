@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using YoavShop.DAL;
 using YoavShop.Models;
 
@@ -16,9 +17,40 @@ namespace YoavShop.Controllers
         private YoavShopContext db = new YoavShopContext();
 
         // GET: ProductCategorie
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.ProductCategories.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            var categories = from categorie in db.ProductCategories select categorie;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                categories = categories.Where(categorie => categorie.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "Name_desc":
+                    categories = categories.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    categories = categories.OrderBy(s => s.Name);
+                    break;
+            }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(categories.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: ProductCategorie/Details/5

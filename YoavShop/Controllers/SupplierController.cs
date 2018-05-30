@@ -16,7 +16,7 @@ namespace YoavShop.Controllers
     {
         private YoavShopContext db = new YoavShopContext();
 
-        // GET: Customers
+        // GET: Suppliers
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
