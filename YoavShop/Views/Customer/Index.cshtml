@@ -11,8 +11,18 @@
 </p>
 <table class="table">
     <tr>
+
+        <th></th>
+    </tr>
+    <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.ActionLink("First Name", "Index", new { sortOrder = ViewBag.FirstNameSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.LastNameSortParm })
+        </th>
+        <th>
+            @Html.ActionLink("User Name", "Index", new { sortOrder = ViewBag.UserNameSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Password)
@@ -36,6 +46,12 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
@@ -54,9 +70,9 @@
                 @Html.DisplayFor(modelItem => item.Buyings.Count)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                @Html.ActionLink("Edit", "Edit", new {id = item.UserId}) |
+                @Html.ActionLink("Details", "Details", new {id = item.UserId}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.UserId})
             </td>
         </tr>
     }

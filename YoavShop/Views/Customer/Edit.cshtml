@@ -18,30 +18,40 @@
         @Html.HiddenFor(model => model.UserId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UserName, "UserName", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FirstName, "FirstName", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox("UserName", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                @Html.TextBox("FirstName", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
-            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.LastName, "LastName", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox("Password", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                @Html.TextBox("LastName", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
             </div>
-            @Html.LabelFor(model => model.CardNumber, "CardNumber", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserName, "UserName", htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.TextBox("CardNumber", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CardNumber, "", new { @class = "text-danger" })
+                @Html.TextBox("UserName", null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.UserName, "", new {@class = "text-danger"})
             </div>
-            @Html.LabelFor(model => model.ExiprationMounth, "ExiprationMounth", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Password, "Password", htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.TextBox("ExiprationMounth", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ExiprationMounth, "", new { @class = "text-danger" })
+                @Html.TextBox("Password", null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.Password, "", new {@class = "text-danger"})
             </div>
-            @Html.LabelFor(model => model.ExiprationYear, "ExiprationYear", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CardNumber, "CardNumber", htmlAttributes: new {@class = "control-label col-md-2"})
             <div class="col-md-10">
-                @Html.TextBox("ExiprationYear", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ExiprationYear, "", new { @class = "text-danger" })
+                @Html.TextBox("CardNumber", null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CardNumber, "", new {@class = "text-danger"})
+            </div>
+            @Html.LabelFor(model => model.ExiprationMounth, "ExiprationMounth", htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.TextBox("ExiprationMounth", null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.ExiprationMounth, "", new {@class = "text-danger"})
+            </div>
+            @Html.LabelFor(model => model.ExiprationYear, "ExiprationYear", htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.TextBox("ExiprationYear", null, htmlAttributes: new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.ExiprationYear, "", new {@class = "text-danger"})
             </div>
         </div>
 

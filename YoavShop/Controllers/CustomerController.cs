@@ -16,9 +16,33 @@ namespace YoavShop.Controllers
         private YoavShopContext db = new YoavShopContext();
 
         // GET: Customers
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
-            var customers = db.Customers;
+            ViewBag.FirstNameSortParm = string.IsNullOrEmpty(sortOrder) ? "FirstName_desc" : "";
+            ViewBag.LastNameSortParm = sortOrder == "LastName" ? "LastName_desc" : "LastName";
+            ViewBag.UserNameSortParm = sortOrder == "UserName" ? "UserName_desc" : "UserName";
+            var customers = from customer in db.Customers select customer;
+            switch (sortOrder)
+            {
+                case "FirstName_desc":
+                    customers = customers.OrderByDescending(s => s.FirstName);
+                    break;
+                case "LastName":
+                    customers = customers.OrderBy(s => s.LastName);
+                    break;
+                case "LastName_desc":
+                    customers = customers.OrderByDescending(s => s.LastName);
+                    break;
+                case "UserName":
+                    customers = customers.OrderBy(s => s.UserName);
+                    break;
+                case "UserName_desc":
+                    customers = customers.OrderByDescending(s => s.UserName);
+                    break;
+                default:
+                    customers = customers.OrderBy(s => s.FirstName);
+                    break;
+            }
             return View(customers.ToList());
         }
 
@@ -49,7 +73,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")]Customer customer)
+        public ActionResult Create([Bind(Include = "FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")]Customer customer)
         {
             try
             {
@@ -90,7 +114,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Customer customer)
+        public ActionResult Edit([Bind(Include = "UserId,FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Customer customer)
         {
             if (ModelState.IsValid)
             {

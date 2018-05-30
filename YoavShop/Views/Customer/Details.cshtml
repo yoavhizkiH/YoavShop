@@ -9,7 +9,20 @@
 <div>
     <h4>Customer</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-vertical">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.UserId)
         </dt>

@@ -20,12 +20,15 @@ namespace YoavShop.DAL
                         ExiprationMounth = 12,
                         ExiprationYear = 2000,
                                         UserName = "YoavSup",
+                    FirstName = "Yoav",
+                    LastName = "Hiz",
                         Password = "123"
                 },
                 new Supplier()
                 {
                     UserId = 2,
-
+                    FirstName = "Asaag",
+                    LastName = "Haaiz",
                         CardNumber = 1111111,
                         ExiprationMounth = 12,
                         ExiprationYear = 2000,
@@ -41,7 +44,8 @@ namespace YoavShop.DAL
                 new Customer()
                 {
                     UserId = 1,
-
+                    FirstName = "aoav",
+                    LastName = "biz",
                         CardNumber = 1111111,
                         ExiprationMounth = 12,
                         ExiprationYear = 2000,
