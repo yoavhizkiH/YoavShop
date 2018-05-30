@@ -11,94 +11,64 @@ namespace YoavShop.DAL
     {
         protected override void Seed(YoavShopContext context)
         {
-            var Suppliers = new List<Supplier>()
-            {
-                new Supplier()
-                {
-                    UserId = 1,
-                        CardNumber = 123123123,
-                        ExiprationMounth = 12,
-                        ExiprationYear = 2000,
-                                        UserName = "YoavSup",
-                    FirstName = "Yoav",
-                    LastName = "Hiz",
-                        Password = "123"
-                },
-                new Supplier()
-                {
-                    UserId = 2,
-                    FirstName = "Asaag",
-                    LastName = "Haaiz",
-                        CardNumber = 1111111,
-                        ExiprationMounth = 12,
-                        ExiprationYear = 2000,
-                        UserName = "AsafSup",
-                        Password = "123"
-                }
-            };
-            context.Suppliers.AddRange(Suppliers);
-            context.SaveChanges();
+            var suppliers = new List<Supplier>();
+            var customers = new List<Customer>();
+            var categories = new List<ProductCategorie>();
+            var products = new List<Product>();
+            var transactions = new List<Transaction>();
 
-            var customers = new List<Customer>()
+            for (int i = 1; i < 15; i++)
             {
-                new Customer()
+                suppliers.Add(new Supplier()
                 {
-                    UserId = 1,
-                    FirstName = "aoav",
-                    LastName = "biz",
-                        CardNumber = 1111111,
-                        ExiprationMounth = 12,
-                        ExiprationYear = 2000,
-                        UserName = "Cust",
-                        Password = "123"
-                }
-            };
+                    UserId = i,
+                    FirstName = $"FirstName{i+15}",
+                    LastName = $"LastName{i+15}",
+                    CardNumber = i * 3,
+                    ExiprationMounth = i % 11 + 1,
+                    ExiprationYear = i + 2000,
+                    UserName = $"User{i+15}",
+                    Password = "Password1!"
+                });
+                customers.Add(new Customer()
+                {
+                    UserId = i,
+                    FirstName = $"FirstName{i}",
+                    LastName = $"LastName{i}",
+                    CardNumber = i * 123,
+                    ExiprationMounth = i % 11 + 1,
+                    ExiprationYear = i + 2000,
+                    UserName = $"User{i}",
+                    Password = "Password1!"
+                });
+                categories.Add(new ProductCategorie()
+                {
+                    Id = i,
+                    Name = $"Jewlery{i}"
+                });
+                products.Add(new Product()
+                {
+                    Id = i,
+                    Name = $"Product{i}",
+                    ProductCategorieId = i,
+                    Description = $"{i}Description{i}",
+                    Price = i*15,
+                    SupplierId = i
+                });
+                transactions.Add(new Transaction()
+                {
+                    CustomerId = i,
+                    MoneyPaid = i*12,
+                    ProductId = i,
+                    TimeStamp = DateTime.Now.AddYears(i)
+                });
+            }
+
+            context.Suppliers.AddRange(suppliers);
             context.Customers.AddRange(customers);
-            context.SaveChanges();
-
-            var categories = new List<ProductCategorie>()
-            {
-                new ProductCategorie()
-                {
-                    Id = 1,
-                    Name = "MenJewlery"
-                },
-                new ProductCategorie()
-                {
-                    Id = 2,
-                    Name = "Watches"
-                }
-            };
             context.ProductCategories.AddRange(categories);
-            context.SaveChanges();
-
-            var Products = new List<Product>()
-            {
-                new Product()
-                {
-                    Id = 1,
-                    Name = "Watch1",
-                    ProductCategorieId = 2,
-                    Description = "Fake rolex",
-                    Price = 5,
-                    SupplierId = 1
-                }
-            };
-            context.Products.AddRange(Products);
-            context.SaveChanges();
-
-            var transactions = new List<Transaction>()
-            {
-                new Transaction()
-                {
-                    CustomerId = 1,
-                    MoneyPaid = 3,
-                    ProductId = 1,
-                    TimeStamp = DateTime.Now
-                }
-            };
+            context.Products.AddRange(products);
             context.Transactions.AddRange(transactions);
-
             context.SaveChanges();
         }
     }
