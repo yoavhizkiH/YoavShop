@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using YoavShop.DAL;
 using YoavShop.Models;
 
@@ -15,10 +16,56 @@ namespace YoavShop.Controllers
     {
         private YoavShopContext db = new YoavShopContext();
 
-        // GET: Supplier
-        public ActionResult Index()
+        // GET: Customers
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Suppliers.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.FirstNameSortParm = string.IsNullOrEmpty(sortOrder) ? "FirstName_desc" : "";
+            ViewBag.LastNameSortParm = sortOrder == "LastName" ? "LastName_desc" : "LastName";
+            ViewBag.UserNameSortParm = sortOrder == "UserName" ? "UserName_desc" : "UserName";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            var suppliers = from supplier in db.Suppliers select supplier;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                suppliers = suppliers.Where(supplier => supplier.LastName.Contains(searchString)
+                || supplier.FirstName.Contains(searchString) || supplier.UserName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "FirstName_desc":
+                    suppliers = suppliers.OrderByDescending(s => s.FirstName);
+                    break;
+                case "LastName":
+                    suppliers = suppliers.OrderBy(s => s.LastName);
+                    break;
+                case "LastName_desc":
+                    suppliers = suppliers.OrderByDescending(s => s.LastName);
+                    break;
+                case "UserName":
+                    suppliers = suppliers.OrderBy(s => s.UserName);
+                    break;
+                case "UserName_desc":
+                    suppliers = suppliers.OrderByDescending(s => s.UserName);
+                    break;
+                default:
+                    suppliers = suppliers.OrderBy(s => s.FirstName);
+                    break;
+            }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(suppliers.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Supplier/Details/5
