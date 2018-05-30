@@ -157,6 +157,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductCategorieController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
     <Compile Include="DAL\YoavShopContext.cs" />
     <Compile Include="DAL\YoavShopInitializer.cs" />
@@ -220,6 +222,16 @@
     <Content Include="Views\Supplier\Details.cshtml" />
     <Content Include="Views\Supplier\Edit.cshtml" />
     <Content Include="Views\Supplier\Index.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\ProductCategorie\Create.cshtml" />
+    <Content Include="Views\ProductCategorie\Delete.cshtml" />
+    <Content Include="Views\ProductCategorie\Details.cshtml" />
+    <Content Include="Views\ProductCategorie\Edit.cshtml" />
+    <Content Include="Views\ProductCategorie\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

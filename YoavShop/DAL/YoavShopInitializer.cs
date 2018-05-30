@@ -7,7 +7,7 @@ using YoavShop.Models;
 
 namespace YoavShop.DAL
 {
-    public class YoavShopInitializer : DropCreateDatabaseAlways<YoavShopContext>
+    public class YoavShopInitializer : DropCreateDatabaseIfModelChanges<YoavShopContext>
     {
         protected override void Seed(YoavShopContext context)
         {
@@ -103,7 +103,7 @@ namespace YoavShop.DAL
                 {
                     Id = 1,
                     Name = "Watch1",
-                    CategorieId = 2,
+                    ProductCategorieId = 2,
                     Description = "Fake rolex",
                     Price = 5,
                     SupplierId = 1
