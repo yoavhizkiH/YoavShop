@@ -47,27 +47,29 @@ namespace YoavShop.Controllers
         {
             if (LoginVar.UserName == "admin" && LoginVar.Password == "admin")
             {
-                return RedirectToAction("Index", "Home", new { area = "Admin" });
+                GlobalVariables.Role = "Admin";
+                return RedirectToAction("Index", "Home");
             }
 
-            Customer CustomerResult = null;
-            Supplier SupplierResult = null;
-
-            CustomerResult =
+            Customer CustomerResult =
                 db.Customers.SingleOrDefault(c => c.UserName == LoginVar.UserName && c.Password == LoginVar.Password);
-            SupplierResult =
-                db.Suppliers.SingleOrDefault(c => c.UserName == LoginVar.UserName && c.Password == LoginVar.Password);
+
 
             if (CustomerResult != null)
             {
-                return RedirectToAction("Index", "Product", new { area = "Customer" });
-            }
-            if (SupplierResult != null)
-            {
-                return RedirectToAction("Index", "Supplier", new { area = "Supplier" });
+                GlobalVariables.Role = "Customer";
+                return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Message = string.Format("UserName and Password is incorrect");
+            Supplier SupplierResult =
+                db.Suppliers.SingleOrDefault(c => c.UserName == LoginVar.UserName && c.Password == LoginVar.Password);
+            if (SupplierResult != null)
+            {
+                GlobalVariables.Role = "Supplier";
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Message = string.Format("UserName and Password are incorrect");
             return View();
         }
 

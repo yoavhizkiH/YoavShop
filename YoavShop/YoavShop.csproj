@@ -163,7 +163,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\ProductCategorieController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\SupplierController.cs" />
@@ -185,6 +185,7 @@
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\TransactionsDateGroup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -253,9 +254,12 @@
     <Content Include="Views\Transaction\Edit.cshtml" />
     <Content Include="Views\Transaction\Index.cshtml" />
     <Content Include="Views\Home\LogIn.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\Navigation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -16,6 +16,20 @@ namespace YoavShop
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            GlobalVariables.Initialize();
+        }
+    }
+
+    public class GlobalVariables
+    {
+        public static string Role { get; set; }
+
+        public static void Initialize()
+        {
+            if (string.IsNullOrEmpty(Role))
+            {
+                Role = "";
+            }
         }
     }
 }
