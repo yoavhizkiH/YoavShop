@@ -91,16 +91,40 @@ namespace YoavShop.Controllers
                 }
             };
 
-            if (GlobalVariables.Role == "Admin")
+            switch (GlobalVariables.Role)
             {
-                menuViewModel.AddRange(mvAdmin);
+                case "Admin":
+                    menuViewModel.AddRange(mvAdmin);
+                    break;
+                case "Customer":
+                    menuViewModel.Add(new MenuViewModel()
+                    {
+                        MenuID = 8,
+                        Action = "Details",
+                        Controller = "Customer",
+                        IsAction = true,
+                        Class = "class",
+                        Title = GlobalVariables.StoreUser.UserName
+                    });
+                    break;
+                case "Supplier":
+                    menuViewModel.Add(new MenuViewModel()
+                    {
+                        MenuID = 8,
+                        Action = "Details",
+                        Controller = "Supplier",
+                        IsAction = true,
+                        Class = "class",
+                        Title = GlobalVariables.StoreUser.UserName
+                    });
+                    break;
             }
 
             if (GlobalVariables.Role == "")
             {
                 menuViewModel.Add(new MenuViewModel()
                 {
-                    MenuID = 8,
+                    MenuID = 9,
                     Action = "LogIn",
                     Controller = "Home",
                     IsAction = true,
@@ -112,7 +136,7 @@ namespace YoavShop.Controllers
             {
                 menuViewModel.Add(new MenuViewModel()
                 {
-                    MenuID = 8,
+                    MenuID = 9,
                     Action = "LogOff",
                     Controller = "Home",
                     IsAction = true,

@@ -69,13 +69,9 @@ namespace YoavShop.Controllers
         }
 
         // GET: Supplier/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Supplier supplier = db.Suppliers.Find(id);
+            Supplier supplier = db.Suppliers.Find(GlobalVariables.StoreUser.Id);
             if (supplier == null)
             {
                 return HttpNotFound();

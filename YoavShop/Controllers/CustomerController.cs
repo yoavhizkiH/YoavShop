@@ -68,13 +68,9 @@ namespace YoavShop.Controllers
         }
 
         // GET: Customers/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
+            Customer customer = db.Customers.Find(GlobalVariables.StoreUser.Id);
             if (customer == null)
             {
                 return HttpNotFound();
