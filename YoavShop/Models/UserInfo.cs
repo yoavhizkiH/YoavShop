@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YoavShop.Models
 {
-    public abstract class UserInfo 
+    public class UserInfo 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

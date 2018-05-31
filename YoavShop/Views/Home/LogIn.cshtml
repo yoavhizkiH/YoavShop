@@ -1,7 +1,36 @@
-﻿
+﻿@model YoavShop.Models.UserInfo
+
 @{
+
     ViewBag.Title = "LogIn";
+
 }
 
-<h2>LogIn</h2>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
 
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+
+<link rel="stylesheet" href="~/Content/Logincss.css" />
+
+<div class="login-container">
+    <section class="login" id="login">
+        <header>
+            <h2>Yoav's Shop</h2>
+            <h4>Login</h4>
+        </header>
+        
+        @using (@Html.BeginForm(null, null, FormMethod.Post, new { @class = "login-form" }))
+
+        {@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        @Html.TextBoxFor(m => m.UserName, new { @class = "login-input", placeholder = "user name" })
+
+        @Html.PasswordFor(m => m.Password, new { @class = "login-input", placeholder = "Password" })
+
+        <div class="text-danger">@ViewBag.Message</div>
+        <div class="submit-container">
+            <button type="submit" class="login-button">SIGN IN</button>
+        </div>
+    }
+    </section>
+</div>

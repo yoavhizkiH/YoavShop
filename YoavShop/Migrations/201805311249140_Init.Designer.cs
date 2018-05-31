@@ -13,7 +13,7 @@ namespace YoavShop.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201805311215213_Init"; }
+            get { return "201805311249140_Init"; }
         }
         
         string IMigrationMetadata.Source
