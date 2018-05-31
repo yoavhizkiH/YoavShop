@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using YoavShop.Models;
 
 namespace YoavShop
 {
@@ -22,14 +23,13 @@ namespace YoavShop
 
     public class GlobalVariables
     {
-        public static string Role { get; set; }
+        public static UserInfo StoreUser { get; set; }
+        public static string Role{ get; set; }
 
         public static void Initialize()
         {
-            if (string.IsNullOrEmpty(Role))
-            {
-                Role = "";
-            }
+            StoreUser = new UserInfo();
+            Role = "";
         }
     }
 }

@@ -48,6 +48,7 @@ namespace YoavShop.Controllers
             if (LoginVar.UserName == "admin" && LoginVar.Password == "admin")
             {
                 GlobalVariables.Role = "Admin";
+                GlobalVariables.StoreUser = new UserInfo{UserName = "admin", Password = "admin"};
                 return RedirectToAction("Index", "Home");
             }
 
@@ -57,6 +58,7 @@ namespace YoavShop.Controllers
             if (CustomerResult != null)
             {
                 GlobalVariables.Role = "Customer";
+                GlobalVariables.StoreUser = CustomerResult;
                 return RedirectToAction("Index", "Home");
             }
 
@@ -65,16 +67,17 @@ namespace YoavShop.Controllers
             if (SupplierResult != null)
             {
                 GlobalVariables.Role = "Supplier";
+                GlobalVariables.StoreUser = SupplierResult;
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Message = string.Format("UserName and Password are incorrect");
+            ViewBag.Message = "UserName and Password are incorrect";
             return View();
         }
 
         public ActionResult LogOff()
         {
-            GlobalVariables.Role = "";
+            GlobalVariables.Initialize();
             return RedirectToAction("Index", "Home");
         }
 
