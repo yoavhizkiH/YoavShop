@@ -22,9 +22,7 @@ namespace YoavShop.Models
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public long CardNumber { get; set; }
-        [Range(1,2100, ErrorMessage = "Invalid Year")]
         public int ExiprationYear { get; set; }
-        [Range(1, 12, ErrorMessage = "Invalid Mounth")]
         public int ExiprationMounth { get; set; }
     }
 }

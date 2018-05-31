@@ -61,9 +61,12 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@if (GlobalVariables.Role == "Admin")
+{
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
