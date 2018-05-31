@@ -81,7 +81,6 @@ namespace YoavShop.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-            //ViewBag.Id = new SelectList(db.s, "Id", "UserName");
             return View();
         }
 
@@ -135,7 +134,6 @@ namespace YoavShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                //db.Entry(creditCard).State = EntityState.Modified;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Details");
