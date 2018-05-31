@@ -108,6 +108,18 @@ namespace YoavShop.Controllers
                     Title = "Log in"
                 });
             }
+            else
+            {
+                menuViewModel.Add(new MenuViewModel()
+                {
+                    MenuID = 8,
+                    Action = "LogOff",
+                    Controller = "Home",
+                    IsAction = true,
+                    Class = "class",
+                    Title = "Log Off"
+                });
+            }
 
             return PartialView("_Navigation", menuViewModel);
         }

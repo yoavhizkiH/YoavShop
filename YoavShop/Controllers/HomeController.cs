@@ -54,7 +54,6 @@ namespace YoavShop.Controllers
             Customer CustomerResult =
                 db.Customers.SingleOrDefault(c => c.UserName == LoginVar.UserName && c.Password == LoginVar.Password);
 
-
             if (CustomerResult != null)
             {
                 GlobalVariables.Role = "Customer";
@@ -71,6 +70,12 @@ namespace YoavShop.Controllers
 
             ViewBag.Message = string.Format("UserName and Password are incorrect");
             return View();
+        }
+
+        public ActionResult LogOff()
+        {
+            GlobalVariables.Role = "";
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
