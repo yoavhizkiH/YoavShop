@@ -100,7 +100,7 @@ namespace YoavShop.Controllers
                     //customer.CreditCard = creditCard;
                     db.Customers.Add(customer);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details");
                 }
             }
             catch (DataException dex)
@@ -138,7 +138,7 @@ namespace YoavShop.Controllers
                 //db.Entry(creditCard).State = EntityState.Modified;
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details");
             }
 
             return View(customer);
