@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YoavShop.Models
 {
-    public class UserInfo 
+    public abstract class UserInfo 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         [Column(TypeName = "VARCHAR")]
         [StringLength(10)]

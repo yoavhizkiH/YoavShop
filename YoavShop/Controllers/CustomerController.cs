@@ -135,7 +135,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Customer customer)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Customer customer)
         {
             if (ModelState.IsValid)
             {

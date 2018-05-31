@@ -21,7 +21,7 @@ namespace YoavShop.DAL
             {
                 suppliers.Add(new Supplier()
                 {
-                    UserId = i,
+                    Id = i,
                     FirstName = $"FirstName{i+15}",
                     LastName = $"LastName{i+15}",
                     CardNumber = i * 3,
@@ -32,7 +32,7 @@ namespace YoavShop.DAL
                 });
                 customers.Add(new Customer()
                 {
-                    UserId = i,
+                    Id = i,
                     FirstName = $"FirstName{i}",
                     LastName = $"LastName{i}",
                     CardNumber = i * 123,
