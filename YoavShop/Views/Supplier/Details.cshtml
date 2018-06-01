@@ -49,12 +49,24 @@
         <dd>
             @Html.DisplayFor(model => model.ExiprationMounth)
         </dd>
+        <dd></dd>
     </dl>
+    @if (GlobalVariables.Role == "Admin")
+    {
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) | @Html.ActionLink("Back to List", "Index")
+        </p>
+    }
+    else
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    }
+    <br /><br/>
+    <h7>Youre products:</h7>
     <br />
-    <h7>Youre products on the site:</h7>
-    <br />
+
     <table class="table">
-        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> </tr>
+        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th></tr>
         @foreach (var item in Model.Products)
         {
             <tr>
@@ -62,9 +74,13 @@
                 <td> @Html.DisplayFor(modelItem => item.Description) </td>
                 <td> @Html.DisplayFor(modelItem => item.Price) </td>
                 <td> @Html.DisplayFor(modelItem => item.ProductCategorie.Name) </td>
+                <td> @item.Amount</td>
+                <td> @item.Color</td>
+                <td>@Html.ActionLink("Edit", "Edit", "Product", new {id = item.Id}, null)</td>
             </tr>
         }
     </table>
+    <h7>Your sellings:</h7>
     <table class="table">
         <tr> <th>Product Name</th> <th>Customer's user name</th> <th>Price Payed</th> <th>Accured At</th> </tr>
         @foreach (var item in Model.Sellings)
@@ -79,13 +95,3 @@
     </table>
 </div>
 
-@if (GlobalVariables.Role == "Admin")
-{
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) | @Html.ActionLink("Back to List", "Index")
-    </p>
-}
-else
-{
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-}

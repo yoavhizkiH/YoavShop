@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using PagedList;
 using YoavShop.DAL;
 using YoavShop.Models;
+using YoavShop.ViewModels;
 
 namespace YoavShop.Controllers
 {
@@ -129,8 +130,10 @@ namespace YoavShop.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName", product.SupplierId);
-            return View(product);
+            ProductViewModel productViewModel = new ProductViewModel();
+            productViewModel.Product = product;
+            productViewModel.ProductCategories = db.ProductCategories.ToList();
+            return View(productViewModel);
         }
 
         // POST: Product/Edit/5
