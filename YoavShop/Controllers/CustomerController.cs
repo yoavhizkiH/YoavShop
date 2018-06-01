@@ -67,14 +67,16 @@ namespace YoavShop.Controllers
             return View(customers.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Customers/Details/5
-        public ActionResult Details()
+
+        public ActionResult Details(int? id)
         {
-            Customer customer = db.Customers.Find(GlobalVariables.StoreUser.Id);
+            var customer = db.Customers.Find(id ?? GlobalVariables.StoreUser.Id);
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
+
             return View(customer);
         }
 
@@ -153,17 +155,6 @@ namespace YoavShop.Controllers
             return View(customer);
         }
 
-        public ActionResult Details(int? id)
-        {
-            var customer = db.Customers.Find(id ?? GlobalVariables.StoreUser.Id);
-
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(customer);
-        }
 
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]

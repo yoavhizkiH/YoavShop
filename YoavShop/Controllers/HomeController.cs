@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -90,6 +91,36 @@ namespace YoavShop.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult Buy(int productId)
+        {
+            if (GlobalVariables.Role != "Customer")
+            {
+                ViewBag.Message = "Please log in with a customer account";
+                return RedirectToAction("Login", "Home");
+            }
+
+            var product = db.Products.Single(p => p.Id == productId);
+
+            if (product.Amount < 1)
+            {
+                ViewBag.Message = "Item is not available";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var newTransaction = new Transaction
+            {
+                ProductId = productId,
+                CustomerId = GlobalVariables.StoreUser.Id,
+                MoneyPaid = product.Price,
+                TimeStamp = DateTime.Now
+            };
+            product.Amount--;
+            db.Transactions.Add(newTransaction);
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Login()
