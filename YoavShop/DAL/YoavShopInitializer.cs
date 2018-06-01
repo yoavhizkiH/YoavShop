@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 using YoavShop.Models;
 
 namespace YoavShop.DAL
@@ -17,20 +15,20 @@ namespace YoavShop.DAL
             var products = new List<Product>();
             var transactions = new List<Transaction>();
 
-            for (int i = 1; i < 15; i++)
+            for (var i = 1; i < 15; i++)
             {
-                suppliers.Add(new Supplier()
+                suppliers.Add(new Supplier
                 {
                     Id = i,
-                    FirstName = $"FirstName{i+15}",
-                    LastName = $"LastName{i+15}",
+                    FirstName = $"FirstName{i + 15}",
+                    LastName = $"LastName{i + 15}",
                     CardNumber = i * 3,
                     ExiprationMounth = i % 11 + 1,
                     ExiprationYear = i + 2000,
-                    UserName = $"User{i+15}",
+                    UserName = $"User{i + 15}",
                     Password = "Password1!"
                 });
-                customers.Add(new Customer()
+                customers.Add(new Customer
                 {
                     Id = i,
                     FirstName = $"FirstName{i}",
@@ -41,32 +39,51 @@ namespace YoavShop.DAL
                     UserName = $"User{i}",
                     Password = "Password1!"
                 });
-                categories.Add(new ProductCategorie()
-                {
-                    Id = i,
-                    Name = $"Jewlery{i}"
-                });
-                products.Add(new Product()
+
+                products.Add(new Product
                 {
                     Id = i,
                     Name = $"Product{i}",
-                    ProductCategorieId = i,
+                    ProductCategorieId = i % 3 + 1,
+                    Color = (Color) Enum.GetValues(typeof(Color)).GetValue(i % 7),
+                    Amount = i * 20,
                     Description = $"{i}Description{i}",
-                    Price = i*15,
+                    Price = i * 15,
                     SupplierId = i
                 });
-                transactions.Add(new Transaction()
+                transactions.Add(new Transaction
                 {
                     CustomerId = i,
-                    MoneyPaid = i*12,
+                    MoneyPaid = i * 12,
                     ProductId = i,
-                    TimeStamp = DateTime.Now.AddYears(i)
+                    TimeStamp = DateTime.Now
                 });
             }
+
+            categories.AddRange(new List<ProductCategorie>
+                {
+                    new ProductCategorie
+                    {
+                        Id = 1,
+                        Name = "Earings"
+                    },
+                    new ProductCategorie
+                    {
+                        Id = 2,
+                        Name = "Watches"
+                    },
+                    new ProductCategorie
+                    {
+                        Id = 3,
+                        Name = "Necklesses"
+                    }
+                }
+            );
 
             context.Suppliers.AddRange(suppliers);
             context.Customers.AddRange(customers);
             context.ProductCategories.AddRange(categories);
+            context.SaveChanges();
             context.Products.AddRange(products);
             context.Transactions.AddRange(transactions);
             context.SaveChanges();

@@ -68,14 +68,17 @@ namespace YoavShop.Controllers
             return View(suppliers.ToPagedList(pageNumber, pageSize));
         }
 
-        // GET: Supplier/Details/5
-        public ActionResult Details()
+        public ActionResult Details(int? id)
         {
-            Supplier supplier = db.Suppliers.Find(GlobalVariables.StoreUser.Id);
+            Supplier supplier;
+            supplier = db.Suppliers.Find(id ?? GlobalVariables.StoreUser.Id);
+
             if (supplier == null)
             {
                 return HttpNotFound();
             }
+            supplier.Sellings = db.Transactions.Where(t => t.Product.SupplierId == supplier.Id).ToList();
+
             return View(supplier);
         }
 

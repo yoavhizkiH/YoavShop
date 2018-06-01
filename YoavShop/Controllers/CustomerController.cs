@@ -125,6 +125,17 @@ namespace YoavShop.Controllers
             return View(customer);
         }
 
+        // GET: Customers/Edit/5
+        public ActionResult Edit()
+        {
+            Customer customer = db.Customers.Find(GlobalVariables.StoreUser.Id);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+            return View(customer);
+        }
+
         // POST: Customers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -142,18 +153,15 @@ namespace YoavShop.Controllers
             return View(customer);
         }
 
-        // GET: Customers/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Customer customer = db.Customers.Find(id);
+            var customer = db.Customers.Find(id ?? GlobalVariables.StoreUser.Id);
+
             if (customer == null)
             {
                 return HttpNotFound();
             }
+
             return View(customer);
         }
 

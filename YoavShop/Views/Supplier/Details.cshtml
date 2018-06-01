@@ -49,17 +49,43 @@
         <dd>
             @Html.DisplayFor(model => model.ExiprationMounth)
         </dd>
-
     </dl>
+    <br />
+    <h7>Youre products on the site:</h7>
+    <br />
+    <table class="table">
+        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> </tr>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.Name) </td>
+                <td> @Html.DisplayFor(modelItem => item.Description) </td>
+                <td> @Html.DisplayFor(modelItem => item.Price) </td>
+                <td> @Html.DisplayFor(modelItem => item.ProductCategorie.Name) </td>
+            </tr>
+        }
+    </table>
+    <table class="table">
+        <tr> <th>Product Name</th> <th>Customer's user name</th> <th>Price Payed</th> <th>Accured At</th> </tr>
+        @foreach (var item in Model.Sellings)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.Product.Name) </td>
+                <td> @Html.DisplayFor(modelItem => item.Customer.UserName) </td>
+                <td> @Html.DisplayFor(modelItem => item.MoneyPaid) </td>
+                <td> @item.TimeStamp.ToString("dd-MM-yyyy hh:mm:ss") </td>
+            </tr>
+        }
+    </table>
 </div>
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-</p>
 
 @if (GlobalVariables.Role == "Admin")
 {
     <p>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) | @Html.ActionLink("Back to List", "Index")
     </p>
+}
+else
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
 }

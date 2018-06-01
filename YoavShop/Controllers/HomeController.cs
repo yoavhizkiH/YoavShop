@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using YoavShop.DAL;
 using YoavShop.Models;
 using YoavShop.ViewModels;
@@ -13,9 +14,63 @@ namespace YoavShop.Controllers
     {
         private YoavShopContext db = new YoavShopContext();
 
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+            ViewBag.SupplierUserNameSortParm = sortOrder == "SupplierUserName" ? "SupplierUserName_desc" : "SupplierUserName";
+            ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
+            ViewBag.CategorieNameSortParm = sortOrder == "CategorieName" ? "CategorieName_desc" : "CategorieName";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            var products = from product in db.Products select product;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(product => product.Name.Contains(searchString)
+                || product.Supplier.UserName.Contains(searchString) ||
+                                                     product.ProductCategorie.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "Name_desc":
+                    products = products.OrderByDescending(s => s.Name);
+                    break;
+                case "SupplierUserName":
+                    products = products.OrderBy(s => s.Supplier.UserName);
+                    break;
+                case "SupplierName_desc":
+                    products = products.OrderByDescending(s => s.Supplier.UserName);
+                    break;
+                case "Price":
+                    products = products.OrderBy(s => s.Price);
+                    break;
+                case "Price_desc":
+                    products = products.OrderByDescending(s => s.Price);
+                    break;
+                case "CategorieName":
+                    products = products.OrderBy(s => s.ProductCategorie.Name);
+                    break;
+                case "CategorieName_desc":
+                    products = products.OrderByDescending(s => s.ProductCategorie.Name);
+                    break;
+                default:
+                    products = products.OrderBy(s => s.Name);
+                    break;
+            }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult About()

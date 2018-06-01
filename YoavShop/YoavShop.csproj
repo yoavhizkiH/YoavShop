@@ -177,6 +177,10 @@
     <Compile Include="Migrations\201805311249140_Init.Designer.cs">
       <DependentUpon>201805311249140_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806011020595_ProductAmountAndColor.cs" />
+    <Compile Include="Migrations\201806011020595_ProductAmountAndColor.Designer.cs">
+      <DependentUpon>201806011020595_ProductAmountAndColor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\Product.cs" />
@@ -198,6 +202,21 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\Photo1.jpg" />
+    <Content Include="Images\Photo10.jpg" />
+    <Content Include="Images\Photo11.jpg" />
+    <Content Include="Images\Photo12.jpg" />
+    <Content Include="Images\Photo13.jpg" />
+    <Content Include="Images\Photo14.jpg" />
+    <Content Include="Images\Photo15.jpg" />
+    <Content Include="Images\Photo2.jpg" />
+    <Content Include="Images\Photo3.jpg" />
+    <Content Include="Images\Photo4.jpg" />
+    <Content Include="Images\Photo5.jpg" />
+    <Content Include="Images\Photo6.jpg" />
+    <Content Include="Images\Photo7.jpg" />
+    <Content Include="Images\Photo8.jpg" />
+    <Content Include="Images\Photo9.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -258,7 +277,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Navigation\" />
   </ItemGroup>
@@ -278,6 +296,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201805311249140_Init.resx">
       <DependentUpon>201805311249140_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806011020595_ProductAmountAndColor.resx">
+      <DependentUpon>201806011020595_ProductAmountAndColor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
