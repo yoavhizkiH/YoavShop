@@ -93,15 +93,19 @@
             <td>
                 @if (item.Amount == 0)
                 {
-                <p>Sold Out</p>
+                    <p>Sold Out</p>
+                }
+                else if (GlobalVariables.Role == "")
+                {
+                    @Html.ActionLink("Login", "Login")
                 }
                 else if (GlobalVariables.Role != "Customer")
                 {
-                    @Html.ActionLink("Login", "Login")    
+                    @Html.ActionLink("Login with customer account", "Login")
                 }
                 else
                 {
-                    @Html.ActionLink("Buy", "Buy", new {productId = @item.Id})    
+                    @Html.ActionLink("Buy", "Buy", new { productId = @item.Id })
                 }
             </td>
         </tr>
