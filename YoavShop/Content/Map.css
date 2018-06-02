@@ -1,0 +1,12 @@
+﻿/* For Google map in About.cshtml*/
+.infoDiv {
+    height: 100px;
+    width: 200px;
+    -webkit-user-select: none;
+    background-color: white;
+}
+
+#map_canvas img {
+    height: 400px;
+    width: 350px;
+}
