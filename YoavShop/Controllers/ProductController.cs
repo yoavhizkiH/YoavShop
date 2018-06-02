@@ -4,10 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using YoavShop.BL;
 using System.Web.Mvc;
 using PagedList;
 using YoavShop.DAL;
+using YoavShop.ExternalFeauters;
 using YoavShop.Models;
 using YoavShop.ViewModels;
 
@@ -16,6 +17,7 @@ namespace YoavShop.Controllers
     public class ProductController : Controller
     {
         private YoavShopContext db = new YoavShopContext();
+        private TweetsFactory tweetsFactory = new TweetsFactory();
 
         // GET: Product
 
@@ -105,13 +107,16 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,Price,ProductCategorieId,SupplierId")] Product product)
+        public ActionResult Create([Bind(Include = "Name,Description,Price,Amount,Color,ProductCategorieId,SupplierId")] Product product)
         {
             if (ModelState.IsValid)
             {
                 db.Products.Add(product);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                product.ProductCategorie = db.ProductCategories.Single(pc => pc.Id == product.ProductCategorieId);
+                product.Supplier = db.Suppliers.Single(supplier => supplier.Id == product.SupplierId);
+                tweetsFactory.Create(product);
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName", product.SupplierId);
@@ -141,13 +146,17 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Color,Amount,Price,ProductCategorieId,SupplierId")] Product product)
+        public ActionResult Edit([Bind(Include = "Name,Description,Price,Amount,Color,ProductCategorieId,SupplierId,ProductCategorie,Supplier")] Product product)
         {
             if (ModelState.IsValid)
             {
+                var oldProduct = db.Products.Single(p => p.Id == product.Id);
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                product.ProductCategorie = db.ProductCategories.Single(pc => pc.Id == product.ProductCategorieId);
+                product.Supplier = db.Suppliers.Single(supplier => supplier.Id == product.SupplierId);
+                tweetsFactory.Edit(product, oldProduct);
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName", product.SupplierId);
             return View(product);
