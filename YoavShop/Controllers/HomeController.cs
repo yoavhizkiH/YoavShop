@@ -86,6 +86,18 @@ namespace YoavShop.Controllers
             return View(data.ToList());
         }
 
+        public ActionResult SuppliersByTransactions()
+        {
+            return Json(new[] {
+                new { Product = "Shoes" , Count = 5 },
+                new { Product = "Shirts" , Count = 9 },
+                new { Product = "Pants" , Count = 3 },
+                new { Product = "Ties" , Count = 1 },
+                new { Product = "Socks" , Count = 7 },
+                new { Product = "Jackets" , Count = 2 }
+            });
+        }
+
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
