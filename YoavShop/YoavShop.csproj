@@ -217,6 +217,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BL\ProductSearch.cs" />
+    <Compile Include="ViewModels\PagedSearchProductsViewModel.cs" />
+    <Compile Include="Models\ProductSearchModel.cs" />
     <Compile Include="BL\TweetsFactory.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -238,6 +241,10 @@
     <Compile Include="Migrations\201806011020595_ProductAmountAndColor.cs" />
     <Compile Include="Migrations\201806011020595_ProductAmountAndColor.Designer.cs">
       <DependentUpon>201806011020595_ProductAmountAndColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806021716064_ColorChangedToProductColor.cs" />
+    <Compile Include="Migrations\201806021716064_ColorChangedToProductColor.Designer.cs">
+      <DependentUpon>201806021716064_ColorChangedToProductColor.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -362,6 +369,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806011020595_ProductAmountAndColor.resx">
       <DependentUpon>201806011020595_ProductAmountAndColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806021716064_ColorChangedToProductColor.resx">
+      <DependentUpon>201806021716064_ColorChangedToProductColor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -45,7 +45,7 @@ namespace YoavShop.DAL
                     Id = i,
                     Name = $"Product{i}",
                     ProductCategorieId = i % 3 + 1,
-                    Color = (Color) Enum.GetValues(typeof(Color)).GetValue(i % 7),
+                    Color = (ProductColor) Enum.GetValues(typeof(ProductColor)).GetValue(i % 7),
                     Amount = i * 20,
                     Description = $"{i}Description{i}",
                     Price = i * 15,

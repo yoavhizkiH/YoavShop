@@ -50,7 +50,7 @@
             @Html.LabelFor(model => model.Color, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select name="Colors">
-                    @foreach (Color c in Enum.GetValues(typeof(Color)))
+                    @foreach (ProductColor c in Enum.GetValues(typeof(ProductColor)))
                     {
                             <option value=@c>@c</option>
                     }

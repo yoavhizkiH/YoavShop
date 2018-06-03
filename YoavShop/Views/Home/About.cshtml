@@ -1,93 +1,112 @@
 ﻿@model IEnumerable<YoavShop.ViewModels.TransactionsDateGroup>
 
 @{
-    ViewBag.Title = "About Yoav's Shop";
+    ViewBag.Title = "About";
 }
-<link rel="stylesheet" href="~/Content/Map.css" type="text/css" media="screen" />﻿
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/Map.css" type="text/css" media="screen" />﻿
+</head>
+<body>
+    <br />
 
+    <!--Currency Converter widget - HTML code - fx-rates.net -->
+    <div style="width: 164px; background-color: #fff; border: darkgray; align-self: center; text-align: right;">
+        <div style="padding: 3px 0px 2px 0px; text-align: center; background-color: #ccc; border: 1px solid #888; width: 317px;">
+            <a title="American Dollar to Israeli New Shekel Conversion Sheet" style="text-decoration: none;
+                font-size: 12px !important; font-family: arial; color: #000000;" href="https://fx-rate.net/USD/ILS/">
+                <b>Dollar to Shekel Conversion Table</b>
+            </a>
+        </div>
+        <script type="text/javascript" src="https://fx-rate.net/conversion.php?size=medium&layout=vertical&currency_pair=ILS&currency=USD"></script>
+    </div>
+<!--end of code-->
 <br />
-<!-- This is the div that will contain the Google Map -->
-<div align="right" id="map_canvas" style="height: 400px; width: 350px"></div>
+    <!-- This is the div that will contain the Google Map -->
+    <div align="right" id="map_canvas" style="height: 400px; width: 350px"></div>
 
-@section scripts {
+    @section scripts {
 
-    <section class="scripts">
+        <section class="scripts">
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                Initialize();
-            });
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    Initialize();
+                });
 
-            function Initialize() {
+                function Initialize() {
 
-                google.maps.visualRefresh = true;
-                var Israel = new google.maps.LatLng(31.969929, 34.772283);
+                    google.maps.visualRefresh = true;
+                    var Israel = new google.maps.LatLng(31.969929, 34.772283);
 
-                var mapOptions = {
-                    zoom: 8,
-                    center: Israel,
-                    mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
-                };
+                    var mapOptions = {
+                        zoom: 8,
+                        center: Israel,
+                        mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
+                    };
 
-                // This makes the div with id "map_canvas" a google map
-                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+                    // This makes the div with id "map_canvas" a google map
+                    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-                // a sample list of JSON encoded data of places to visit in Tunisia
-                // you can either make up a JSON list server side, or call it from a controller using JSONResult
-                var data = [
-                    { "Id": 1, "PlaceName": "סניף ראשון לציון", "GeoLong": "31.969365", "GeoLat": "34.772289" },
-                    { "Id": 2, "PlaceName": "סניף תל אביב", "GeoLong": "32.086167", "GeoLat": "34.790039" },
-                    { "Id": 3, "PlaceName": "סניף ירושלים", "GeoLong": "31.768809", "GeoLat": "35.212450" },
-                    { "Id": 4, "PlaceName": "סניף המכללה למנהל", "GeoLong": "31.969929", "GeoLat": "34.772283" }
-                ];
+                    // a sample list of JSON encoded data of places to visit in Tunisia
+                    // you can either make up a JSON list server side, or call it from a controller using JSONResult
+                    var data = [
+                        { "Id": 1, "PlaceName": "סניף ראשון לציון", "GeoLong": "31.969365", "GeoLat": "34.772289" },
+                        { "Id": 2, "PlaceName": "סניף תל אביב", "GeoLong": "32.086167", "GeoLat": "34.790039" },
+                        { "Id": 3, "PlaceName": "סניף ירושלים", "GeoLong": "31.768809", "GeoLat": "35.212450" },
+                        { "Id": 4, "PlaceName": "סניף המכללה למנהל", "GeoLong": "31.969929", "GeoLat": "34.772283" }
+                    ];
 
-                $.each(data, function (i, item) {
-                    var marker = new google.maps.Marker({
-                        'position': new google.maps.LatLng(item.GeoLong, item.GeoLat),
-                        'map': map,
-                        'title': item.PlaceName
-                    });
+                    $.each(data, function (i, item) {
+                        var marker = new google.maps.Marker({
+                            'position': new google.maps.LatLng(item.GeoLong, item.GeoLat),
+                            'map': map,
+                            'title': item.PlaceName
+                        });
 
-                    var itemContent = "<div class='infoDiv'><h4>" + item.PlaceName + "</h4>" +
-                        "<h5>Opening Hours:</h5><h5>08:00-16:00</h5></div>";
-                    
-                    var infowindow = new google.maps.InfoWindow({
-                        content: itemContent
-                    });
+                        var itemContent = "<div class='infoDiv'><h4>" + item.PlaceName + "</h4>" +
+                            "<h5>Opening Hours:</h5><h5>08:00-16:00</h5></div>";
 
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infowindow.open(map, marker);
-                    });
-                })
-            }
-        </script>
-    </section>
-}
+                        var infowindow = new google.maps.InfoWindow({
+                            content: itemContent
+                        });
 
-<h2>Transactions Body Statistics</h2>
-
-<table>
-    <tr>
-        <th>
-            Transaction Date
-        </th>
-        <th>
-            Transactions
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionDate)
-            </td>
-            <td>
-                @item.TransactionsCount
-            </td>
-        </tr>
+                        google.maps.event.addListener(marker, 'click', function () {
+                            infowindow.open(map, marker);
+                        });
+                    })
+                }
+            </script>
+        </section>
     }
-</table>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBannxhtQQR-AIphU4cX0fwO_T3-XSl6e8&callback=Initialize">
-</script>
+
+    <h2>Transactions Body Statistics</h2>
+
+    <table>
+        <tr>
+            <th>
+                Transaction Date
+            </th>
+            <th>
+                Transactions
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionDate)
+                </td>
+                <td>
+                    @item.TransactionsCount
+                </td>
+            </tr>
+        }
+    </table>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBannxhtQQR-AIphU4cX0fwO_T3-XSl6e8&">
+    </script>
+</body>
+
+</html>

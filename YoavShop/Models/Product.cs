@@ -13,16 +13,15 @@ namespace YoavShop.Models
         public string Description { get; set; }
         public int Price { get; set; }
         public int Amount { get; set; }
-        public Color Color { get; set; }
+        public ProductColor Color { get; set; }
         public int ProductCategorieId { get; set; }
         [ForeignKey("Supplier")]
         public int SupplierId { get; set; }
-
         public virtual ProductCategorie ProductCategorie { get; set; }
         public virtual Supplier Supplier { get; set; }
     }
 
-    public enum Color
+    public enum ProductColor
     {
         White,
         Black,

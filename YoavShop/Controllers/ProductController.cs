@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using YoavShop.BL;
@@ -16,22 +18,28 @@ namespace YoavShop.Controllers
 {
     public class ProductController : Controller
     {
+        private ProductSearch productSearch = new ProductSearch();
         private YoavShopContext db = new YoavShopContext();
         private TweetsFactory tweetsFactory = new TweetsFactory();
 
         // GET: Product
 
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string searchParams, int? PageNumber, [Bind(Include = "sortOrder")]string sortOrder, [Bind(Include = "currentFilter")] string currentFilter, string searchString)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
             ViewBag.SupplierUserNameSortParm = sortOrder == "SupplierUserName" ? "SupplierUserName_desc" : "SupplierUserName";
             ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
             ViewBag.CategorieNameSortParm = sortOrder == "CategorieName" ? "CategorieName_desc" : "CategorieName";
+            var pspViewModel = new PagedSearchProductsViewModel{ProductSearchModel = new ProductSearchModel()};
+            
+            IEnumerable<Product> products = db.Products.AsQueryable();
 
-            if (searchString != null)
+            if (!string.IsNullOrEmpty(searchParams))//pspViewModel.ProductSearchModel != null && pspViewModel.ProductSearchModel.IsSearched())
             {
-                page = 1;
+                pspViewModel.ProductSearchModel = new ProductSearchModel(searchParams);
+                products = productSearch.GetProducts(pspViewModel.ProductSearchModel);
+                ViewBag.CurrentProducts = products;
             }
             else
             {
@@ -39,15 +47,7 @@ namespace YoavShop.Controllers
             }
 
             ViewBag.CurrentFilter = searchString;
-            var products = from product in db.Products select product;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(product => product.Name.Contains(searchString)
-                || product.Supplier.UserName.Contains(searchString) ||
-                                                     product.ProductCategorie.Name.Contains(searchString));
-            }
-
+            
             switch (sortOrder)
             {
                 case "Name_desc":
@@ -76,8 +76,9 @@ namespace YoavShop.Controllers
                     break;
             }
             int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(products.ToPagedList(pageNumber, pageSize));
+            int pageNumber = (PageNumber ?? 1);
+            pspViewModel.PagedList = products.ToPagedList(pageNumber, pageSize);
+            return View(pspViewModel);
         }
 
         // GET: Product/Details/5
@@ -107,7 +108,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Description,Price,Amount,Color,ProductCategorieId,SupplierId")] Product product)
+        public ActionResult Create([Bind(Include = "Name,Description,Price,Amount,ProductColor,ProductCategorieId,SupplierId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -146,7 +147,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name,Description,Price,Amount,Color,ProductCategorieId,SupplierId,ProductCategorie,Supplier")] Product product)
+        public ActionResult Edit([Bind(Include = "Name,Description,Price,Amount,ProductColor,ProductCategorieId,SupplierId,ProductCategorie,Supplier")] Product product)
         {
             if (ModelState.IsValid)
             {

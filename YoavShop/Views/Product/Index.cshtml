@@ -1,8 +1,11 @@
-﻿@model PagedList.IPagedList<YoavShop.Models.Product>
+﻿@model PagedSearchProductsViewModel
 @using PagedList.Mvc;
+@using YoavShop.ViewModels
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Products";
+    var pspViewModel = Model;
+
 }
 
 <h2>Products</h2>
@@ -11,14 +14,22 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm("Index", "Product", FormMethod.Get))
+@using (Html.BeginForm("Index", "Product", FormMethod.Post))
 {
-    <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    <table>
+        <tr>
+            <td>Name: </td>
+            <td>
+                @Html.TextBoxFor(m => m.ProductSearchModel.Name, ViewBag.CurrentFilter as string)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Search" /></td>
+        </tr>
+    </table>
 }
-
+<br />
 <table class="table">
     <tr>
         <th>
@@ -39,7 +50,7 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.PagedList)
     {
         <tr>
             <td>
@@ -68,7 +79,10 @@
 
 </table>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+Page @(Model.PagedList.PageCount < Model.PagedList.PageNumber ? 0 : Model.PagedList.PageNumber) of @Model.PagedList.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.PagedListPager(Model.PagedList, PageNumber => Url.Action("Index", new
+{
+    PageNumber,sortOrder = ViewBag.CurrentSort, searchParams = Model.ProductSearchModel.ToString()
+
+}))

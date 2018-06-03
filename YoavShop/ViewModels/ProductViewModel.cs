@@ -10,6 +10,6 @@ namespace YoavShop.ViewModels
     {
         public IEnumerable<ProductCategorie> ProductCategories { get; set; }
         public Product Product { get; set; }
-        public Color Color { get; set; }
+        public ProductColor Color { get; set; }
     }
 }
