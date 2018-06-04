@@ -30,15 +30,6 @@ namespace YoavShop.Controllers
                     IsAction = true,
                     Class = "class",
                     Title = "About"
-                },
-                new MenuViewModel
-                {
-                    MenuID = 3,
-                    Action = "Contact",
-                    Controller = "Home",
-                    IsAction = true,
-                    Class = "class",
-                    Title = "Contact"
                 }
             };
 
@@ -78,7 +69,7 @@ namespace YoavShop.Controllers
                     Controller = "ProductCategorie",
                     IsAction = true,
                     Class = "class",
-                    Title = "Product Categories"
+                    Title = "Categories"
                 },
                 new MenuViewModel()
                 {
@@ -88,6 +79,15 @@ namespace YoavShop.Controllers
                     IsAction = true,
                     Class = "class",
                     Title = "Transactions"
+                },
+                new MenuViewModel()
+                {
+                    MenuID = 8,
+                    Action = "Index",
+                    Controller = "MapLocation",
+                    IsAction = true,
+                    Class = "class",
+                    Title = "Branches"
                 }
             };
 
@@ -99,7 +99,7 @@ namespace YoavShop.Controllers
                 case "Customer":
                     menuViewModel.Add(new MenuViewModel()
                     {
-                        MenuID = 8,
+                        MenuID = 9,
                         Action = "Details",
                         Controller = "Customer",
                         IsAction = true,
@@ -110,7 +110,7 @@ namespace YoavShop.Controllers
                 case "Supplier":
                     menuViewModel.Add(new MenuViewModel()
                     {
-                        MenuID = 8,
+                        MenuID = 9,
                         Action = "Details",
                         Controller = "Supplier",
                         IsAction = true,
@@ -124,7 +124,7 @@ namespace YoavShop.Controllers
             {
                 menuViewModel.Add(new MenuViewModel()
                 {
-                    MenuID = 9,
+                    MenuID = 10,
                     Action = "LogIn",
                     Controller = "Home",
                     IsAction = true,
@@ -136,7 +136,7 @@ namespace YoavShop.Controllers
             {
                 menuViewModel.Add(new MenuViewModel()
                 {
-                    MenuID = 9,
+                    MenuID = 10,
                     Action = "LogOff",
                     Controller = "Home",
                     IsAction = true,

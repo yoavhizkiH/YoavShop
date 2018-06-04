@@ -10,13 +10,12 @@ namespace YoavShop.DAL
 {
     public class YoavShopContext : DbContext
     {
-        //public DbSet<CreditCard> CreditCards { get; set; }
-        //public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<ProductCategorie> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<MapLocation> MapLocations { get; set; }
 
         public YoavShopContext() : base(nameof(YoavShopContext))
         {
@@ -26,5 +25,6 @@ namespace YoavShop.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
     }
 }

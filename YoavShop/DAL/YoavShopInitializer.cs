@@ -14,6 +14,7 @@ namespace YoavShop.DAL
             var categories = new List<ProductCategorie>();
             var products = new List<Product>();
             var transactions = new List<Transaction>();
+            var branches = new List<MapLocation>();
 
             for (var i = 1; i < 15; i++)
             {
@@ -80,12 +81,50 @@ namespace YoavShop.DAL
                 }
             );
 
+            branches.AddRange(new List<MapLocation>
+                {
+                    new MapLocation
+                    {
+                        Id = 1,
+                        PlaceName = "סניף ראשון לציון",
+                        GeoLong = 31.969365,
+                        GeoLat = 34.772289,
+                        Info = "שעות פתיחה: 10:00 - 17:00"
+                    },
+                    new MapLocation
+                    {
+                        Id = 2,
+                        PlaceName = "סניף תל אביב",
+                        GeoLong = 32.086167,
+                        GeoLat = 34.790039,
+                        Info = "שעות פתיחה: 11:00 - 11:01"
+                    },
+                    new MapLocation
+                    {
+                        Id = 3,
+                        PlaceName = "סניף ירושלים",
+                        GeoLong = 31.768809,
+                        GeoLat = 35.212450,
+                        Info = "שעות פתיחה: 8:00 - 13:00"
+                    },
+                    new MapLocation
+                    {
+                        Id = 4,
+                        PlaceName = "סניף המכללה למנהל",
+                        GeoLong = 31.969929,
+                        GeoLat = 34.772283,
+                        Info = "שעות פתיחה: 15:00 - 22:00"
+                    }
+                }
+            );
+
             context.Suppliers.AddRange(suppliers);
             context.Customers.AddRange(customers);
             context.ProductCategories.AddRange(categories);
             context.SaveChanges();
             context.Products.AddRange(products);
             context.Transactions.AddRange(transactions);
+            context.MapLocations.AddRange(branches);
             context.SaveChanges();
         }
     }

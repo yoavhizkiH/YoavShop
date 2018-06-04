@@ -219,6 +219,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BL\ProductSearch.cs" />
     <Compile Include="BL\StatisticsManager.cs" />
+    <Compile Include="Controllers\MapLocationController.cs" />
+    <Compile Include="Migrations\201806042220368_AddedMapLocations.cs" />
+    <Compile Include="Migrations\201806042220368_AddedMapLocations.Designer.cs">
+      <DependentUpon>201806042220368_AddedMapLocations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MapLocation.cs" />
     <Compile Include="ViewModels\PagedSearchProductsViewModel.cs" />
     <Compile Include="Models\ProductSearchModel.cs" />
     <Compile Include="BL\TweetsFactory.cs" />
@@ -319,7 +325,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Customer\Delete.cshtml" />
@@ -348,6 +353,11 @@
     <Content Include="Views\Transaction\Index.cshtml" />
     <Content Include="Views\Home\LogIn.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
+    <Content Include="Views\MapLocation\Create.cshtml" />
+    <Content Include="Views\MapLocation\Delete.cshtml" />
+    <Content Include="Views\MapLocation\Details.cshtml" />
+    <Content Include="Views\MapLocation\Edit.cshtml" />
+    <Content Include="Views\MapLocation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -376,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806021716064_ColorChangedToProductColor.resx">
       <DependentUpon>201806021716064_ColorChangedToProductColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806042220368_AddedMapLocations.resx">
+      <DependentUpon>201806042220368_AddedMapLocations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

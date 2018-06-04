@@ -19,61 +19,58 @@
         </div>
         <script type="text/javascript" src="https://fx-rate.net/conversion.php?size=medium&layout=vertical&currency_pair=ILS&currency=USD"></script>
     </div>
-    <!--end of currency web service-->
+<!--end of currency web service-->
+
     <!-- This is the div that will contain the Google Map -->
-    <div id="map_canvas" style="height: 400px; width: 350px;"></div>
+    <div id="map_canvas"></div>
 
     @section scripts {
 
         <section class="scripts">
 
             <script type="text/javascript">
-                $(document).ready(function () {
-                    Initialize();
+                $.ajax({
+                    url: '@Url.Action("MapLocations", "Home")',
+                    type: 'GET',
+                    success: function(data) {
+
+                        google.maps.visualRefresh = true;
+                        var Israel = new google.maps.LatLng(31.969929, 34.772283);
+
+                        var mapOptions = {
+                            zoom: 8,
+                            center: Israel,
+                            mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
+                        };
+
+                        // This makes the div with id "map_canvas" a google map
+                        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                        $.each(data,
+                            function(i, item) {
+                                var marker = new google.maps.Marker({
+                                    'position': new google.maps.LatLng(item.GeoLong, item.GeoLat),
+                                    'map': map,
+                                    'title': item.PlaceName
+                                });
+
+                                var itemContent = "<div class='infoDiv'><h4>" +
+                                    item.PlaceName +
+                                    "</h4>" +
+                                    "<h5>" + item.Info + "</h5></div>";
+
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: itemContent
+                                });
+
+                                google.maps.event.addListener(marker,
+                                    'click',
+                                    function() {
+                                        infowindow.open(map, marker);
+                                    });
+                            });
+                    }
                 });
-
-                function Initialize() {
-
-                    google.maps.visualRefresh = true;
-                    var Israel = new google.maps.LatLng(31.969929, 34.772283);
-
-                    var mapOptions = {
-                        zoom: 8,
-                        center: Israel,
-                        mapTypeId: google.maps.MapTypeId.G_NORMAL_MAP
-                    };
-
-                    // This makes the div with id "map_canvas" a google map
-                    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-                    // a sample list of JSON encoded data of places to visit in Tunisia
-                    // you can either make up a JSON list server side, or call it from a controller using JSONResult
-                    var data = [
-                        { "Id": 1, "PlaceName": "סניף ראשון לציון", "GeoLong": "31.969365", "GeoLat": "34.772289" },
-                        { "Id": 2, "PlaceName": "סניף תל אביב", "GeoLong": "32.086167", "GeoLat": "34.790039" },
-                        { "Id": 3, "PlaceName": "סניף ירושלים", "GeoLong": "31.768809", "GeoLat": "35.212450" },
-                        { "Id": 4, "PlaceName": "סניף המכללה למנהל", "GeoLong": "31.969929", "GeoLat": "34.772283" }
-                    ];
-
-                    $.each(data, function (i, item) {
-                        var marker = new google.maps.Marker({
-                            'position': new google.maps.LatLng(item.GeoLong, item.GeoLat),
-                            'map': map,
-                            'title': item.PlaceName
-                        });
-
-                        var itemContent = "<div class='infoDiv'><h4>" + item.PlaceName + "</h4>" +
-                            "<h5>Opening Hours:</h5><h5>08:00-16:00</h5></div>";
-
-                        var infowindow = new google.maps.InfoWindow({
-                            content: itemContent
-                        });
-
-                        google.maps.event.addListener(marker, 'click', function () {
-                            infowindow.open(map, marker);
-                        });
-                    })
-                }
             </script>
         </section>
     }

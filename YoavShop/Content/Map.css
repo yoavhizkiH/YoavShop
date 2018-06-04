@@ -2,11 +2,17 @@
 .infoDiv {
     height: 100px;
     width: 200px;
+    -ms-user-select: none;
+    -moz-user-select: none;
     -webkit-user-select: none;
+    user-select: none;
+}
+#map_canvas {
+    height: 400px;
+    width: 350px;
 }
 
 #map_canvas img {
     height: 400px;
     width: 350px;
-    align-self: right;
 }

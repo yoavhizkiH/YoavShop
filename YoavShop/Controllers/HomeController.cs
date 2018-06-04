@@ -82,6 +82,11 @@ namespace YoavShop.Controllers
             return View();
         }
 
+        public ActionResult MapLocations()
+        {
+            return Json(db.MapLocations.ToList() , JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult SuppliersByTransactions()
         {
             return Json(
@@ -94,13 +99,6 @@ namespace YoavShop.Controllers
             return Json(
                 StatisticsManager.TransactionsByTime(db.Transactions.ToList())
                 , JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
 
         public ActionResult Buy(int productId)
