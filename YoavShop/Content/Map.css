@@ -9,4 +9,5 @@
 #map_canvas img {
     height: 400px;
     width: 350px;
+    align-self: right;
 }

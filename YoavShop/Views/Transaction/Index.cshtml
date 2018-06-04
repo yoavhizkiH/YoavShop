@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.MoneyPaid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TimeStamp.ToString("dd-MM-yyyy hh:mm:ss"))
+               @item.TimeStamp.ToString("dd-MM-yyyy hh:mm:ss")
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |

@@ -4,7 +4,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using PagedList;
+using YoavShop.BL;
 using YoavShop.DAL;
 using YoavShop.Models;
 using YoavShop.ViewModels;
@@ -14,6 +16,7 @@ namespace YoavShop.Controllers
     public class HomeController : Controller
     {
         private YoavShopContext db = new YoavShopContext();
+        private StatisticsManager StatisticsManager  = new StatisticsManager();
 
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -76,26 +79,21 @@ namespace YoavShop.Controllers
 
         public ActionResult About()
         {
-            IQueryable<TransactionsDateGroup> data = from transaction in db.Transactions
-                group transaction by transaction.TimeStamp into dateGroup
-                select new TransactionsDateGroup()
-                {
-                    TransactionDate = dateGroup.Key,
-                    TransactionsCount = dateGroup.Count()
-                };
-            return View(data.ToList());
+            return View();
         }
 
         public ActionResult SuppliersByTransactions()
         {
-            return Json(new[] {
-                new { Product = "Shoes" , Count = 5 },
-                new { Product = "Shirts" , Count = 9 },
-                new { Product = "Pants" , Count = 3 },
-                new { Product = "Ties" , Count = 1 },
-                new { Product = "Socks" , Count = 7 },
-                new { Product = "Jackets" , Count = 2 }
-            });
+            return Json(
+                StatisticsManager.GetSuppliersByMoney(db.Suppliers.ToList(), db.Transactions.Include(t => t.Product).ToList())
+                , JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TransactionsByTime()
+        {
+            return Json(
+                StatisticsManager.TransactionsByTime(db.Transactions.ToList())
+                , JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Contact()

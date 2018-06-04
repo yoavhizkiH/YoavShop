@@ -218,6 +218,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BL\ProductSearch.cs" />
+    <Compile Include="BL\StatisticsManager.cs" />
     <Compile Include="ViewModels\PagedSearchProductsViewModel.cs" />
     <Compile Include="Models\ProductSearchModel.cs" />
     <Compile Include="BL\TweetsFactory.cs" />
