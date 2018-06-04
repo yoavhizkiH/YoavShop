@@ -272,6 +272,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\diamond.jpg" />
     <Content Include="Images\emerald-green_grande.png" />
+    <Content Include="Content\milk_way.jpg" />
+    <Content Include="Images\milk_way.jpg" />
     <Content Include="Images\Photo1.jpg" />
     <Content Include="Images\Photo10.jpg" />
     <Content Include="Images\Photo11.jpg" />

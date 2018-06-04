@@ -1,6 +1,7 @@
-﻿body {
-    padding-top: 50px;
+﻿body, html {
     padding-bottom: 20px;
+    height: 100%;
+    margin: 0;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -8,7 +9,40 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+#nav {
+    background-color: #EEE8AA;
+}
 
+#footer {
+    -webkit-animation: bgcolor 20s infinite;
+    -moz-animation: ease-in;
+    animation: bgcolor 10s infinite;
+    -moz-animation-direction: alternate;
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+}
+
+@keyframes bgcolor {
+    0% {
+        background-color: #FAFAD2
+    }
+
+    30% {
+        background-color: #EEE8AA
+    }
+
+    60% {
+        background-color: #F0E68C
+    }
+
+    90% {
+        background-color: #DAA520
+    }
+
+    100% {
+        background-color: #FFD700
+    }
+}
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -21,6 +55,19 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.bg {
+    /* The image used */
+    background-image: url("~/Images/milk_way.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 img {

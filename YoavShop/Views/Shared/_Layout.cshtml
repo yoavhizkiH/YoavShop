@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Yoav's Shop</title>
-    <link rel="shortcut icon" type="image/jpg" href="~/Images/diamond.jpg"/>
+    <link rel="shortcut icon" type="image/jpg" href="~/Images/diamond.jpg" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body style="margin:0px; padding:0px;">
+<body >
         @Html.Action("Menu", "Navigation")
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        <footer id="footer" >
             <p>&copy; @DateTime.Now.Year - Yoav's shop</p>
         </footer>
     </div>
