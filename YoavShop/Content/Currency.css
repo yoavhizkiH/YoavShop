@@ -1,0 +1,22 @@
+﻿#currency {
+    width: auto;
+    border: darkgray;
+    float: right;
+    align-self: center;
+    text-align: center;
+}
+
+#currencyTable {
+    padding: 3px 2px;
+    text-align: center;
+    background-color: #ccc;
+    border: 1px solid #888;
+    width: auto;
+}
+
+#currencyTitle {
+    text-decoration: none;
+    font-size: 12px ;
+    font-family: arial;
+    color: #000000;
+}
