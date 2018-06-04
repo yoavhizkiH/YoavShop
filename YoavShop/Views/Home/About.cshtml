@@ -3,8 +3,9 @@
 }
 <html>
 <head>
-    <link rel="stylesheet" href="~/Content/Map.css" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="~/Content/Currency.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="~/Content/Map.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="~/Content/Currency.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="~/Content/Charts.css" type="text/css" media="screen" />
 </head>
 <body>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
@@ -19,8 +20,7 @@
         </div>
         <script type="text/javascript" src="https://fx-rate.net/conversion.php?size=medium&layout=vertical&currency_pair=ILS&currency=USD"></script>
     </div>
-<!--end of currency web service-->
-
+    <!--end of currency web service-->
     <!-- This is the div that will contain the Google Map -->
     <div id="map_canvas"></div>
 
@@ -76,142 +76,105 @@
     }
     <!-- end of map-->
 
-<br />
-<div id="charts" style="display: flex">
-<div class="barchart" style="float: left">
-    <!-- bar chart -->
-    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <style>
-        #barChart {
-            font-size: 14px;
-        }
+    <br />
+    <div id="charts">
+        <div class="barchart">
+            <!-- bar chart -->
+            <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+            <h4>Suppliers / Money maid</h4>
+            <svg id="barChart"></svg>
+            <script>
+                $.ajax({
+                    url: '@Url.Action("SuppliersByTransactions", "Home")',
+                    type: 'GET',
+                    success: function (data) {
+                        var margin = {
+                                top: 20,
+                                right: 20,
+                                bottom: 75,
+                                left: 40
+                            },
+                            width = 350 - margin.left - margin.right,
+                            height = 250 - margin.top - margin.bottom;
 
-        .bar {
-            fill: steelblue;
-        }
+                        var x = d3.scale.ordinal()
+                            .rangeRoundBands([width, 0], 0.1);
 
-            .bar:hover {
-                fill: brown;
-            }
+                        var y = d3.scale.linear()
+                            .range([0, height]);
 
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
+                        var xAxis = d3.svg.axis()
+                            .scale(x)
+                            .orient("bottom");
 
-        .x.axis path {
-            display: none;
-        }
-    </style>
-    <h4>Supplier by amount of money they maid</h4>
+                        var yAxis = d3.svg.axis()
+                            .scale(y)
+                            .orient("left")
+                            .tickFormat(d3.format("d"))
+                            .tickSubdivide(0);
 
-    <svg id="barChart" style="float: left"></svg>
+                        var svg = d3.select("svg#barChart")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    <script>
-    $.ajax({
-        url: '@Url.Action("SuppliersByTransactions", "Home")',
-        type: 'GET',
-        success: function (dat) {
+                        x.domain(data.map(function(d) {
+                            return d.UserName;
+                        }));
 
-            var data = dat;
-            var margin = {
-                    top: 20,
-                    right: 20,
-                    bottom: 50,
-                    left: 40
-                },
-                width = 350 - margin.left - margin.right,
-                height = 250 - margin.top - margin.bottom;
+                        y.domain([
+                            d3.max(data,
+                                function(d) {
+                                    return d.Count;
+                                }), 0
+                        ]);
 
+                        svg.append("g")
+                            .attr("class", "y axis")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis)
+                            .selectAll("text")
+                            .attr("transform", "rotate(90)")
+                            .attr("x", 0)
+                            .attr("y", -6)
+                            .attr("dx", ".6em")
+                            .style("text-anchor", "start");
 
-            var x = d3.scale.ordinal()
-                .rangeRoundBands([width, 0], 0.1);
+                        svg.append("g")
+                            .attr("class", "y axis")
+                            .call(yAxis);
 
-            var y = d3.scale.linear()
-                .range([0, height]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .tickFormat(d3.format("d"))
-                .tickSubdivide(0);
-
-
-            var svg = d3.select("svg#barChart")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            x.domain(data.map(function(d) {
-                return d.UserName;
-            }));
-
-            y.domain([
-                d3.max(data,
-                    function(d) {
-                        return d.Count;
-                    }), 0
-            ]);
-
-            svg.append("g")
-                .attr("class", "y axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .selectAll("text")
-                .attr("transform", "rotate(90)")
-                .attr("x", 0)
-                .attr("y", -6)
-                .attr("dx", ".6em")
-                .style("text-anchor", "start");
-
-            svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis);
-
-            svg.selectAll(".bar")
-                .data(data)
-                .enter().append("rect")
-                .attr("class", "bar")
-                .attr("x",
-                    function(d) {
-                        return x(d.UserName);
-                    })
-                .attr("width", x.rangeBand())
-                .attr("y",
-                    function(d) {
-                        return y(d.Count);
-                    })
-                .attr("height",
-                    function(d) {
-                        return height - y(d.Count);
-                    });
-        }
-    });
-    </script>
-</div>
-<div id="linechart">
-<h4>Number of transactions over time</h4>
-    <svg id="lineChart"></svg>
-    <style>
-        .line {
-            fill: none;
-            stroke: steelblue;
-            stroke-width: 2px;
-        }
-    </style>
-    <script type="text/javascript">
+                        svg.selectAll(".bar")
+                            .data(data)
+                            .enter().append("rect")
+                            .attr("class", "bar")
+                            .attr("x",
+                                function(d) {
+                                    return x(d.UserName);
+                                })
+                            .attr("width", x.rangeBand())
+                            .attr("y",
+                                function(d) {
+                                    return y(d.Count);
+                                })
+                            .attr("height",
+                                function(d) {
+                                    return height - y(d.Count);
+                                });
+                    }
+                });
+            </script>
+        </div>
+        <!-- line chart -->
+        <div id="linechart">
+            <h4>Number of transactions by time</h4>
+            <svg id="lineChart"></svg>
+            <script type="text/javascript">
     $.ajax({
         url: '@Url.Action("TransactionsByTime", "Home")',
         type: 'GET',
-        success: function(dat) {
-            var data = dat;
+        success: function(data) {
             var width = 300;
             var height = 100;
 
@@ -228,7 +191,6 @@
             x.domain([0, data.length]);
             y.domain([0, d3.max(data, function(d) { return d; })]);
 
-
             var line = d3.svg.line()
                 .x(function(d, i) { return x(i); })
                 .y(function(d) { return y(d); });
@@ -238,14 +200,13 @@
                 .attr("class", "line")
                 .attr("d", line);
         }});
-    </script>
+            </script>
+        </div>
+        <!-- end of line chart -->
     </div>
-    <!-- end of line chart -->
-</div>
-<br />
-    
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBannxhtQQR-AIphU4cX0fwO_T3-XSl6e8&">
-        </script>
+    <br />
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBannxhtQQR-AIphU4cX0fwO_T3-XSl6e8&">
+    </script>
 </body>
 </html>
