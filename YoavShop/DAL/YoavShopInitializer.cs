@@ -26,7 +26,7 @@ namespace YoavShop.DAL
                     CardNumber = i * 3,
                     ExiprationMounth = i % 11 + 1,
                     ExiprationYear = i + 2000,
-                    UserName = $"User{i + 15}",
+                    UserName = $"Supplier{i}",
                     Password = "Password1!"
                 });
                 customers.Add(new Customer
@@ -37,7 +37,7 @@ namespace YoavShop.DAL
                     CardNumber = i * 123,
                     ExiprationMounth = i % 11 + 1,
                     ExiprationYear = i + 2000,
-                    UserName = $"User{i}",
+                    UserName = $"Customer{i}",
                     Password = "Password1!"
                 });
 
@@ -57,7 +57,7 @@ namespace YoavShop.DAL
                     CustomerId = i,
                     MoneyPaid = i * 12,
                     ProductId = i,
-                    TimeStamp = DateTime.Now
+                    TimeStamp = DateTime.Now.AddMonths(i%5)
                 });
             }
 
