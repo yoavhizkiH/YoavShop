@@ -131,35 +131,33 @@ namespace YoavShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Products.AsNoTracking().Single(p => p.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            ProductViewModel productViewModel = new ProductViewModel();
-            productViewModel.Product = product;
-            productViewModel.ProductCategories = db.ProductCategories.ToList();
+
+            var productViewModel = new ProductViewModel
+            {
+                Product = product,
+                ProductCategories = db.ProductCategories.ToList()
+            };
             return View(productViewModel);
         }
 
-        // POST: Product/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name,Description,Price,Amount,ProductColor,ProductCategorieId,SupplierId,ProductCategorie,Supplier")] Product product)
+        public ActionResult Edit([Bind(Include = "Id,Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product)
         {
             if (ModelState.IsValid)
             {
-                var oldProduct = db.Products.Single(p => p.Id == product.Id);
+                var oldProduct = db.Products.AsNoTracking().Single(p => p.Id == product.Id);
+
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
-                product.ProductCategorie = db.ProductCategories.Single(pc => pc.Id == product.ProductCategorieId);
-                product.Supplier = db.Suppliers.Single(supplier => supplier.Id == product.SupplierId);
                 tweetsFactory.Edit(product, oldProduct);
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName", product.SupplierId);
             return View(product);
         }
 

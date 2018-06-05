@@ -22,12 +22,12 @@ namespace YoavShop.BL
 
             if (beforeChanges.Amount == 0 && afterChanges.Amount > 0)
             {
-                message = $"New supply of product {afterChanges.Name} is Here! Come and get it before its over";
+                message += $"New supply of product {afterChanges.Name} is Here! Come and get it before its over. ";
             }
             if (beforeChanges.Color != afterChanges.Color)
             {
-                message = $"New supply of product {afterChanges.Name} with diffrent color is Here! " +
-                          $"The new color is {afterChanges.Color}";
+                message += $"New supply of product {afterChanges.Name} with diffrent color is Here! " +
+                          $"The new color is {afterChanges.Color}. ";
             }
 
             if (!string.IsNullOrEmpty(message))
