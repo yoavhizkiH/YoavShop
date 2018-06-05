@@ -7,30 +7,57 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Index", "Product", FormMethod.Get))
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        @{
+            if (string.IsNullOrEmpty(ViewBag.CurrentNameFilter))
+            {
+                <input type="text" name="searchName" placeholder="Product Name">
+            }
+            else
+            {
+                <input type="text" name="searchName" value=@ViewBag.CurrentNameFilter as string>
+            }
+
+            if (string.IsNullOrEmpty(ViewBag.CurrentSupplierFilter))
+            {
+                <input type="text" name="SearchSupplierName" placeholder="Supplier Name">
+            }
+            else
+            {
+                <input type="text" name="SearchSupplierName" value=@ViewBag.CurrentSupplierFilter as string>
+            }
+
+            if (string.IsNullOrEmpty(ViewBag.CurrentCategorieFilter))
+            {
+                <input type="text" name="searchCategorie" placeholder="Categorie Name">
+            }
+            else
+            {
+                <input type="text" name="searchCategorie" value=@ViewBag.CurrentCategorieFilter as string>
+            }
+        }
+        <br><br />
         <input type="submit" value="Search" />
     </p>
 }
-
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
             Description
         </th>
         <th>
-            @Html.ActionLink("Supplier User Name", "Index", new { sortOrder = ViewBag.SupplierUserNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Supplier User Name", "Index", new { sortOrder = ViewBag.SupplierUserNameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
-            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
-            @Html.ActionLink("Categorie Name", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Categorie Name", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
             Color
@@ -43,7 +70,6 @@
         </th>
         <th></th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
@@ -70,9 +96,7 @@
                     @{
                         var iSrc = $"~/Images/Photo{item.Id}.jpg";
                     }
-                    <a target="_blank" href='@Url.Content(iSrc)'>
-                        <img src='@Url.Content(iSrc)' alt="Image not found" style="width:40px">
-                    </a>
+                <a target="_blank" href='@Url.Content(iSrc)'><img src='@Url.Content(iSrc)' alt="Image not found" style="width:40px"></a>
                 </div>
             </td>
             <td>
@@ -99,11 +123,9 @@
         </tr>
     }
 </table>
-<br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
 @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    new { page, sortOrder = ViewBag.CurrentSort, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter }))
 
 <!-- /.container -->
 <!-- jQuery -->

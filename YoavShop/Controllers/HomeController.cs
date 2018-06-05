@@ -18,32 +18,44 @@ namespace YoavShop.Controllers
         private YoavShopContext db = new YoavShopContext();
         private StatisticsManager StatisticsManager  = new StatisticsManager();
 
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string sortOrder, [Bind(Include = "currentNameFilter")]string currentNameFilter, string currentSupplierFilter,
+            string searchName, string searchSupplierName, string searchCategorie, string currentCategorieFilter, int? page)
+        {
+            if (searchName != null || searchSupplierName != null || searchCategorie != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchName = currentNameFilter;
+                searchSupplierName = currentSupplierFilter;
+                searchCategorie = currentCategorieFilter;
+            }
+
+            ViewBag.CurrentNameFilter = searchName;
+            ViewBag.CurrentSupplierFilter = searchSupplierName;
+            ViewBag.CurrentCategorieFilter = searchCategorie;
+            var products = db.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchName) || !string.IsNullOrEmpty(searchSupplierName) || !string.IsNullOrEmpty(searchCategorie))
+            {
+                products = string.IsNullOrEmpty(searchName) ? products :  products.Where(product => product.Name.Contains(searchName));
+                products = string.IsNullOrEmpty(searchSupplierName) ? products : products.Where(product => product.Supplier.UserName.Contains(searchSupplierName));
+                products = string.IsNullOrEmpty(searchCategorie) ? products : products.Where(product => product.ProductCategorie.Name.Contains(searchCategorie));
+            }
+
+            products = SortProducts(sortOrder, products);
+
+            return View(products.ToPagedList(page ?? 1, 3));
+        }
+
+        public IQueryable<Product> SortProducts(string sortOrder, IQueryable<Product> products)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
             ViewBag.SupplierUserNameSortParm = sortOrder == "SupplierUserName" ? "SupplierUserName_desc" : "SupplierUserName";
             ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
             ViewBag.CategorieNameSortParm = sortOrder == "CategorieName" ? "CategorieName_desc" : "CategorieName";
-
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-
-            ViewBag.CurrentFilter = searchString;
-            var products = from product in db.Products select product;
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                products = products.Where(product => product.Name.Contains(searchString)
-                || product.Supplier.UserName.Contains(searchString) ||
-                                                     product.ProductCategorie.Name.Contains(searchString));
-            }
 
             switch (sortOrder)
             {
@@ -53,7 +65,7 @@ namespace YoavShop.Controllers
                 case "SupplierUserName":
                     products = products.OrderBy(s => s.Supplier.UserName);
                     break;
-                case "SupplierName_desc":
+                case "SupplierUserName_desc":
                     products = products.OrderByDescending(s => s.Supplier.UserName);
                     break;
                 case "Price":
@@ -72,9 +84,8 @@ namespace YoavShop.Controllers
                     products = products.OrderBy(s => s.Name);
                     break;
             }
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(products.ToPagedList(pageNumber, pageSize));
+
+            return products;
         }
 
         public ActionResult About()
