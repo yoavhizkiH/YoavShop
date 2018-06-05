@@ -97,10 +97,14 @@ namespace YoavShop.Controllers
         }
 
         // GET: Product/Create
-        public ActionResult Create()
+        public ActionResult Create(int SupplierId)
         {
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName");
-            return View();
+            var productViewModel = new ProductViewModel
+            {
+                Product = new Product(){SupplierId = SupplierId},
+                ProductCategories = db.ProductCategories.ToList()
+            };
+            return View(productViewModel);
         }
 
         // POST: Product/Create
@@ -108,7 +112,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Description,Price,Amount,ProductColor,ProductCategorieId,SupplierId")] Product product)
+        public ActionResult Create([Bind(Include = "Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product)
         {
             if (ModelState.IsValid)
             {

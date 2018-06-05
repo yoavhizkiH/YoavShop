@@ -61,10 +61,9 @@
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
     }
-    <br /><br/>
+    <br /><br />
     <h7>Youre products:</h7>
     <br />
-
     <table class="table">
         <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th></tr>
         @foreach (var item in Model.Products)
@@ -76,10 +75,12 @@
                 <td> @Html.DisplayFor(modelItem => item.ProductCategorie.Name) </td>
                 <td> @item.Amount</td>
                 <td> @item.Color</td>
-                <td>@Html.ActionLink("Edit", "Edit", "Product", new {id = item.Id}, null)</td>
+                <td>@Html.ActionLink("Edit", "Edit", "Product", new { id = item.Id }, null)</td>
             </tr>
         }
     </table>
+    @Html.ActionLink("Create new product", "Create", "Product", new { SupplierId = Model.Id }, null)
+    <br/><br/>
     <h7>Your sellings:</h7>
     <table class="table">
         <tr> <th>Product Name</th> <th>Customer's user name</th> <th>Price Payed</th> <th>Accured At</th> </tr>

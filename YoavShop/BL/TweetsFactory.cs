@@ -39,7 +39,7 @@ namespace YoavShop.BL
         public void Create(Product product)
         {
             var message =
-                $"New product is Here! Under the categorie {product.ProductCategorie.Name} you can find the newest product in the store - {product.Name} for only {product.Price}$. Hurry up! There are only {product.Amount} Left!";
+                $"New product is Here! Under the category {product.ProductCategorie.Name} you can find the newest product in the store - {product.Name} for only {product.Price}$. Hurry up! There are only {product.Amount} Left!";
             TwitterApi.Tweet(message);
         }
     }
