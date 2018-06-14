@@ -224,6 +224,10 @@
     <Compile Include="Migrations\201806042220368_AddedMapLocations.Designer.cs">
       <DependentUpon>201806042220368_AddedMapLocations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806141341318_AddedProductActiveProperty.cs" />
+    <Compile Include="Migrations\201806141341318_AddedProductActiveProperty.Designer.cs">
+      <DependentUpon>201806141341318_AddedProductActiveProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\MapLocation.cs" />
     <Compile Include="ViewModels\PagedSearchProductsViewModel.cs" />
     <Compile Include="Models\ProductSearchModel.cs" />
@@ -390,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806042220368_AddedMapLocations.resx">
       <DependentUpon>201806042220368_AddedMapLocations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806141341318_AddedProductActiveProperty.resx">
+      <DependentUpon>201806141341318_AddedProductActiveProperty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

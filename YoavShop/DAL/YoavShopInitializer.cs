@@ -50,6 +50,7 @@ namespace YoavShop.DAL
                     Amount = i * 20,
                     Description = $"{i}Description{i}",
                     Price = i * 15,
+                    IsActive = true,
                     SupplierId = i
                 });
                 transactions.Add(new Transaction

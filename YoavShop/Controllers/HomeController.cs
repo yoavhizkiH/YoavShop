@@ -35,7 +35,7 @@ namespace YoavShop.Controllers
             ViewBag.CurrentNameFilter = searchName;
             ViewBag.CurrentSupplierFilter = searchSupplierName;
             ViewBag.CurrentCategorieFilter = searchCategorie;
-            var products = db.Products.AsQueryable();
+            var products = db.Products.Where(p => p.IsActive).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchName) || !string.IsNullOrEmpty(searchSupplierName) || !string.IsNullOrEmpty(searchCategorie))
             {

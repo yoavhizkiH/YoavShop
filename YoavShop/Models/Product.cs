@@ -14,6 +14,7 @@ namespace YoavShop.Models
         public int Price { get; set; }
         public int Amount { get; set; }
         public ProductColor Color { get; set; }
+        public bool IsActive { get; set; }
         public int ProductCategorieId { get; set; }
         [ForeignKey("Supplier")]
         public int SupplierId { get; set; }

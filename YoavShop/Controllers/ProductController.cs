@@ -33,9 +33,9 @@ namespace YoavShop.Controllers
             ViewBag.CategorieNameSortParm = sortOrder == "CategorieName" ? "CategorieName_desc" : "CategorieName";
             var pspViewModel = new PagedSearchProductsViewModel{ProductSearchModel = new ProductSearchModel()};
             
-            IEnumerable<Product> products = db.Products.AsQueryable();
+            IEnumerable<Product> products = db.Products.Where(p => p.IsActive).AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchParams))//pspViewModel.ProductSearchModel != null && pspViewModel.ProductSearchModel.IsSearched())
+            if (!string.IsNullOrEmpty(searchParams))
             {
                 pspViewModel.ProductSearchModel = new ProductSearchModel(searchParams);
                 products = productSearch.GetProducts(pspViewModel.ProductSearchModel);
@@ -226,6 +226,7 @@ namespace YoavShop.Controllers
             }
             else
             {
+                product.IsActive = false;
                 db.Entry(product).State = EntityState.Modified;
             }
 
