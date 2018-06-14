@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+using System.IO;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Web;
 using YoavShop.BL;
 using System.Web.Mvc;
 using PagedList;
@@ -112,20 +112,34 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product)
+        public ActionResult Create([Bind(Include = "Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                if (file.ContentLength <= 0)
+                    throw new Exception("Error while uploading");
+
                 db.Products.Add(product);
                 db.SaveChanges();
+
+                var fileName = $"Photo{product.Id}";
+                var extension = Path.GetExtension(file.FileName);
+                var fullName = fileName + extension;
+                var physicalPath = Server.MapPath("~/Images/" + fullName);
+                file.SaveAs(physicalPath);
+                
                 product.ProductCategorie = db.ProductCategories.Single(pc => pc.Id == product.ProductCategorieId);
                 product.Supplier = db.Suppliers.Single(supplier => supplier.Id == product.SupplierId);
                 tweetsFactory.Create(product);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Supplier");
             }
 
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "UserName", product.SupplierId);
-            return View(product);
+            var productViewModel = new ProductViewModel
+            {
+                Product = product,
+                ProductCategories = db.ProductCategories.ToList()
+            };
+            return View(productViewModel);
         }
 
         // GET: Product/Edit/5
@@ -151,18 +165,29 @@ namespace YoavShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product)
+        public ActionResult Edit([Bind(Include = "Id,Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product, HttpPostedFileBase file)
         {
-            if (ModelState.IsValid)
-            {
-                var oldProduct = db.Products.AsNoTracking().Single(p => p.Id == product.Id);
+            if (!ModelState.IsValid) return View(product);
 
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                tweetsFactory.Edit(product, oldProduct);
-                return RedirectToAction("Index", "Home");
+            if (file != null)
+            {
+                if (file.ContentLength <= 0)
+                    throw new Exception("Error while uploading");
+
+                var filePath = Server.MapPath($"~/Images/Photo{product.Id}.jpg");
+
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+
+                file.SaveAs(filePath);
             }
-            return View(product);
+
+            var oldProduct = db.Products.AsNoTracking().Single(p => p.Id == product.Id);
+
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            tweetsFactory.Edit(product, oldProduct);
+            return RedirectToAction("Details", "Supplier");
         }
 
         // GET: Product/Delete/5

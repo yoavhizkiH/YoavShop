@@ -65,7 +65,7 @@
     <h7>Youre products:</h7>
     <br />
     <table class="table">
-        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th></tr>
+        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th><th>Photo</th></tr>
         @foreach (var item in Model.Products)
         {
             <tr>
@@ -75,6 +75,14 @@
                 <td> @Html.DisplayFor(modelItem => item.ProductCategorie.Name) </td>
                 <td> @item.Amount</td>
                 <td> @item.Color</td>
+                <td>
+                    <div>
+                        @{
+                            var iSrc = $"~/Images/Photo{item.Id}.jpg";
+                        }
+                        <a target="_blank" href='@Url.Content(iSrc)'><img src='@Url.Content(iSrc)' alt="Image not found" style="width:40px"></a>
+                    </div>
+                </td>
                 <td>@Html.ActionLink("Edit", "Edit", "Product", new { id = item.Id }, null)</td>
             </tr>
         }

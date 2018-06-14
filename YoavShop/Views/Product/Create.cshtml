@@ -8,7 +8,8 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Product", FormMethod.Post,
+    new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -59,6 +60,11 @@
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.Product.ProductCategorieId, new SelectList(Model.ProductCategories, "Id", "Name"))
             @Html.ValidationMessageFor(model => model.Product.ProductCategorieId)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+           Upload photo: @Html.TextBox("file", "", new {type = "file"})
         </div>
     </div>
     <div class="form-group">
