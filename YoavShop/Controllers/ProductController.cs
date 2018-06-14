@@ -210,10 +210,28 @@ namespace YoavShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
+            var product = db.Products.Find(id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+            if (!db.Transactions.Any(t => t.ProductId == product.Id))
+            {
+                var filePath = Server.MapPath($"~/Images/Photo{product.Id}.jpg");
+
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+
+                db.Products.Remove(product);
+            }
+            else
+            {
+                db.Entry(product).State = EntityState.Modified;
+            }
+
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Details", "Supplier");
         }
 
         protected override void Dispose(bool disposing)
