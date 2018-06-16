@@ -1,7 +1,7 @@
 ﻿#shoptitle {
     text-shadow: 2px 2px #DAA520;
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 80px;
     background: #F0E68C;
     -webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
     transition: width 2s;
@@ -24,4 +24,8 @@
     border: 2px solid #DAA520;
     padding: 10px;
     border-radius: 25px;
+}
+
+#myCanvas {
+    border: 1px solid #d3d3d3;
 }
