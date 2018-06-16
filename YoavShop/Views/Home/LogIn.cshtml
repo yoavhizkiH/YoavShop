@@ -36,10 +36,18 @@
         }
     </section>
 </div>
-
+<br/>
 <div>
     <footer>
-        <h4>Don't have an account yet?</h4>
+        <canvas id="myCanvas" width="250" height="30" style="border:1px solid #d3d3d3;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+
+        <script>
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            ctx.font = "20px Arial";
+            ctx.strokeText("Dont have an account yet?",10,20);
+        </script>
     </footer>
     <p>
         Sign up as a
