@@ -13,6 +13,7 @@ namespace YoavShop.Models
         public int Id { get; set; }
         public virtual string UserName { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }

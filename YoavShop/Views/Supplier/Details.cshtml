@@ -74,7 +74,7 @@
     {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
     }
-    <br /><br />
+    <br /><br/>
     <h7>Youre products:</h7>
     <br />
     <table class="table">
@@ -84,7 +84,7 @@
             <tr>
                 <td> @Html.DisplayFor(modelItem => item.Name) </td>
                 <td> @Html.DisplayFor(modelItem => item.Description) </td>
-                <td> @Html.DisplayFor(modelItem => item.Price) </td>
+                <td> @Html.DisplayFor(modelItem => item.Price)$ </td>
                 <td> @Html.DisplayFor(modelItem => item.ProductCategorie.Name) </td>
                 <td> @item.Amount</td>
                 <td> @item.Color</td>
@@ -115,7 +115,7 @@
             <tr>
                 <td> @Html.DisplayFor(modelItem => item.Product.Name) </td>
                 <td> @Html.DisplayFor(modelItem => item.Customer.UserName) </td>
-                <td> @Html.DisplayFor(modelItem => item.MoneyPaid) </td>
+                <td> @Html.DisplayFor(modelItem => item.MoneyPaid)$ </td>
                 <td> @item.TimeStamp.ToString("dd-MM-yyyy hh:mm:ss") </td>
             </tr>
         }
