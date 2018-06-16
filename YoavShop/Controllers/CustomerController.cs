@@ -101,7 +101,7 @@ namespace YoavShop.Controllers
                     //customer.CreditCard = creditCard;
                     db.Customers.Add(customer);
                     db.SaveChanges();
-                    return RedirectToAction("Details");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             catch (DataException dex)
@@ -149,7 +149,7 @@ namespace YoavShop.Controllers
             {
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Details");
+                return RedirectToAction("Index");
             }
 
             return View(customer);
@@ -174,6 +174,11 @@ namespace YoavShop.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        public JsonResult IsUserExists(string UserName)
+        {
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(!db.Customers.Any(x => x.UserName == UserName), JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -23,9 +23,9 @@ namespace YoavShop.DAL
                     Id = i,
                     FirstName = $"FirstName{i + 15}",
                     LastName = $"LastName{i + 15}",
-                    CardNumber = i * 3,
+                    CardNumber = $"378282246310005",
                     ExiprationMounth = i % 11 + 1,
-                    ExiprationYear = i + 2000,
+                    ExiprationYear = 2019,
                     UserName = $"Supplier{i}",
                     Password = "Password1!"
                 });
@@ -34,9 +34,9 @@ namespace YoavShop.DAL
                     Id = i,
                     FirstName = $"FirstName{i}",
                     LastName = $"LastName{i}",
-                    CardNumber = i * 123,
+                    CardNumber = $"378282246310005",
                     ExiprationMounth = i % 11 + 1,
-                    ExiprationYear = i + 2000,
+                    ExiprationYear = 2019,
                     UserName = $"Customer{i}",
                     Password = "Password1!"
                 });
@@ -120,6 +120,7 @@ namespace YoavShop.DAL
             );
 
             context.Suppliers.AddRange(suppliers);
+            context.SaveChanges();
             context.Customers.AddRange(customers);
             context.ProductCategories.AddRange(categories);
             context.SaveChanges();

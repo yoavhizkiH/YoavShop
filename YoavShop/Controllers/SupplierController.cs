@@ -93,13 +93,13 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Supplier supplier)
+        public ActionResult Create([Bind(Include = "FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")]Supplier supplier)
         {
             if (ModelState.IsValid)
             {
                 db.Suppliers.Add(supplier);
                 db.SaveChanges();
-                return RedirectToAction("Details");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(supplier);
@@ -125,7 +125,7 @@ namespace YoavShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Supplier supplier)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,CardNumber,ExiprationYear,ExiprationMounth")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
@@ -169,6 +169,11 @@ namespace YoavShop.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        public JsonResult IsUserExists(string UserName)
+        {
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(!db.Suppliers.Any(x => x.UserName == UserName), JsonRequestBehavior.AllowGet);
         }
     }
 }

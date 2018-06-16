@@ -1,11 +1,9 @@
-﻿@model PagedSearchProductsViewModel
+﻿@model PagedList.IPagedList<YoavShop.Models.Product>
 @using PagedList.Mvc;
-@using YoavShop.ViewModels
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
 @{
     ViewBag.Title = "Products";
-    var pspViewModel = Model;
-
 }
 
 <h2>Products</h2>
@@ -14,46 +12,78 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@using (Html.BeginForm("Index", "Product", FormMethod.Post))
+@using (Html.BeginForm("Index", "Product", FormMethod.Get))
 {
-    <table>
-        <tr>
-            <td>Name: </td>
-            <td>
-                @Html.TextBoxFor(m => m.ProductSearchModel.Name, ViewBag.CurrentFilter as string)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Search" /></td>
-        </tr>
-    </table>
+    <p>
+        @{
+            if (string.IsNullOrEmpty(ViewBag.CurrentNameFilter))
+            {
+                <input type="text" name="searchName" placeholder="Product Name">
+            }
+            else
+            {
+                <input type="text" name="searchName" value=@ViewBag.CurrentNameFilter as string>
+            }
+
+            if (string.IsNullOrEmpty(ViewBag.CurrentSupplierFilter))
+            {
+                <input type="text" name="SearchSupplierName" placeholder="Supplier Name">
+            }
+            else
+            {
+                <input type="text" name="SearchSupplierName" value=@ViewBag.CurrentSupplierFilter as string>
+            }
+
+            if (string.IsNullOrEmpty(ViewBag.CurrentCategorieFilter))
+            {
+                <input type="text" name="searchCategorie" placeholder="Categorie Name">
+            }
+            else
+            {
+                <input type="text" name="searchCategorie" value=@ViewBag.CurrentCategorieFilter as string>
+            }
+
+            <div class="form-group">
+                <span>Active: </span> @Html.CheckBox("active",true)
+                <span> | Not Active: </span> @Html.CheckBox("notActive", false)
+            </div>
+        }
+        <br><br />
+        <input type="submit" value="Search" />
+    </p>
 }
-<br />
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
             Description
         </th>
         <th>
-            @Html.ActionLink("Supplier User Name", "Index", new { sortOrder = ViewBag.SupplierUserNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Supplier User Name", "Index", new { sortOrder = ViewBag.SupplierUserNameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
-            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
-            @Html.ActionLink("Categorie Name", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Categorie Name", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter })
         </th>
         <th>
-            @Html.ActionLink("Is Active", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentFilter = ViewBag.CurrentFilter, isActive = ViewBag.IsActive })
+            Color
+        </th>
+        <th>
+            Photo
+        </th>
+        <th>
+            Left in stock
+        </th>
+        <th>
+            Is active
         </th>
         <th></th>
     </tr>
-
-    @foreach (var item in Model.PagedList)
+    @foreach (var item in Model)
     {
         <tr>
             <td>
@@ -66,25 +96,47 @@
                 @Html.DisplayFor(modelItem => item.Supplier.UserName)
             </td>
             <td>
-                @item.Price $
+                @item.Price$
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductCategorie.Name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @item.Color
             </td>
+            <td>
+                <div>
+                    @{
+                        var iSrc = $"~/Images/Photo{item.Id}.jpg";
+                    }
+                    <a target="_blank" href='@Url.Content(iSrc)'><img src='@Url.Content(iSrc)' alt="Image not found" style="width:40px"></a>
+                </div>
+            </td>
+            <td>
+                @item.Amount
+            </td>
+            <td>
+                @item.IsActive
+            </td>
+
+
         </tr>
     }
-
 </table>
-<br />
-Page @(Model.PagedList.PageCount < Model.PagedList.PageNumber ? 0 : Model.PagedList.PageNumber) of @Model.PagedList.PageCount
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentNameFilter = ViewBag.CurrentNameFilter, currentSupplierFilter = ViewBag.CurrentSupplierFilter, currentCategorieFilter = ViewBag.CurrentCategorieFilter }))
 
-@Html.PagedListPager(Model.PagedList, PageNumber => Url.Action("Index", new
-{
-    PageNumber,sortOrder = ViewBag.CurrentSort, searchParams = Model.ProductSearchModel.ToString()
+<!-- /.container -->
+<!-- jQuery -->
+<script src="~/Scripts/jquery-3.3.1.js"></script>
 
-}))
+<!-- Bootstrap Core JavaScript -->
+<script src="~/scripts/bootstrap.min.js"></script>
+
+<!-- Script to Activate the Carousel -->
+<script>
+    $('.carousel').carousel({
+        interval: 1000 //changes the speed
+    })
+</script>

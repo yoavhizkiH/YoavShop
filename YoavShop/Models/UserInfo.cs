@@ -6,23 +6,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YoavShop.Models
 {
-    public class UserInfo 
+    public class UserInfo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [Column(TypeName = "VARCHAR")]
-        [StringLength(10)]
-        [Index(IsUnique = true)]
-        [Required]
-        public string UserName { get; set; }
+        public virtual string UserName { get; set; }
         [Required]
         public string Password { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public long CardNumber { get; set; }
+        [CreditCard]
+        public string CardNumber { get; set; }
+        [Range(2018, 2028)]
         public int ExiprationYear { get; set; }
+        [Range(1,12)]
         public int ExiprationMounth { get; set; }
     }
 }
