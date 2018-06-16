@@ -1,0 +1,27 @@
+﻿#shoptitle {
+    text-shadow: 2px 2px #DAA520;
+    width: 100px;
+    height: 100px;
+    background: #F0E68C;
+    -webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
+    transition: width 2s;
+}
+
+    #shoptitle:hover {
+        width: 300px;
+    }
+
+@font-face {
+    font-family: myFirstFont;
+    src: url(SansationLight.woff);
+}
+
+.agenda {
+    font-family: myFirstFont;
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+    border: 2px solid #DAA520;
+    padding: 10px;
+    border-radius: 25px;
+}
