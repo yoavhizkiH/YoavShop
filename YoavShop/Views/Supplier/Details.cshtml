@@ -65,8 +65,8 @@
     <h7>Youre products:</h7>
     <br />
     <table class="table">
-        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th><th>Photo</th></tr>
-        @foreach (var item in Model.Products)
+        <tr> <th>Product Name</th> <th>Description</th> <th>Price</th> <th>Categorie</th> <th>Amount left</th> <th>Color</th><th>Photo</th>@if(GlobalVariables.Role == "Admin"){<th>Is Active</th>}<th/><th/></tr>
+        @foreach (var item in (GlobalVariables.Role == "Admin" ? Model.Products : Model.Products.Where(p => p.IsActive)))
         {
             <tr>
                 <td> @Html.DisplayFor(modelItem => item.Name) </td>
@@ -83,6 +83,10 @@
                         <a target="_blank" href='@Url.Content(iSrc)'><img src='@Url.Content(iSrc)' alt="Image not found" style="width:40px"></a>
                     </div>
                 </td>
+                @if(GlobalVariables.Role == "Admin")
+                {
+                    <td> @Html.DisplayFor(modelItem => item.IsActive) </td>
+                }
                 <td>@Html.ActionLink("Edit", "Edit", "Product", new { id = item.Id }, null)</td>
                 <td>@Html.ActionLink("Delete", "Delete", "Product", new { id = item.Id }, null)</td>
             </tr>

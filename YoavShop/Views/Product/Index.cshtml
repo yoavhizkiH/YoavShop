@@ -47,6 +47,9 @@
         <th>
             @Html.ActionLink("Categorie Name", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
+        <th>
+            @Html.ActionLink("Is Active", "Index", new { sortOrder = ViewBag.CategorieNameSortParm, currentFilter = ViewBag.CurrentFilter, isActive = ViewBag.IsActive })
+        </th>
         <th></th>
     </tr>
 
@@ -64,8 +67,7 @@
             </td>
             <td>
                 @item.Price $
-                </td>
-
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductCategorie.Name)
             </td>

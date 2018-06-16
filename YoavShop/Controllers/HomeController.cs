@@ -164,7 +164,7 @@ namespace YoavShop.Controllers
             {
                 GlobalVariables.Role = "Customer";
                 GlobalVariables.StoreUser = CustomerResult;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Customer");
             }
 
             Supplier SupplierResult =
@@ -173,7 +173,7 @@ namespace YoavShop.Controllers
             {
                 GlobalVariables.Role = "Supplier";
                 GlobalVariables.StoreUser = SupplierResult;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Supplier");
             }
 
             ViewBag.Message = "UserName and Password are incorrect";

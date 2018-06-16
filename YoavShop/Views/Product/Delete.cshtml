@@ -58,7 +58,14 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @if (GlobalVariables.Role == "Admin")
+            {
+                    @Html.ActionLink("Back to List", "Index")
+            }
+            else
+            {
+                    @Html.ActionLink("Back to profile", "Details", "Supplier", new { id = GlobalVariables.StoreUser.Id }, null)
+            }
         </div>
     }
 </div>

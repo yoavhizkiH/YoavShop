@@ -24,16 +24,17 @@ namespace YoavShop.Controllers
 
         // GET: Product
 
-        public ActionResult Index(string searchParams, int? PageNumber, [Bind(Include = "sortOrder")]string sortOrder, [Bind(Include = "currentFilter")] string currentFilter, string searchString)
+        public ActionResult Index(string searchParams, int? PageNumber, [Bind(Include = "sortOrder")]string sortOrder, [Bind(Include = "currentFilter")] string currentFilter, string searchString, bool? isActive)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
             ViewBag.SupplierUserNameSortParm = sortOrder == "SupplierUserName" ? "SupplierUserName_desc" : "SupplierUserName";
             ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
             ViewBag.CategorieNameSortParm = sortOrder == "CategorieName" ? "CategorieName_desc" : "CategorieName";
+            ViewBag.IsActive = isActive ?? true;
             var pspViewModel = new PagedSearchProductsViewModel{ProductSearchModel = new ProductSearchModel()};
             
-            IEnumerable<Product> products = db.Products.Where(p => p.IsActive).AsQueryable();
+            IEnumerable<Product> products = ViewBag.IsActive ? db.Products.Where(p => p.IsActive).AsQueryable() : db.Products.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchParams))
             {
@@ -165,7 +166,7 @@ namespace YoavShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId")]Product product, HttpPostedFileBase file)
+        public ActionResult Edit([Bind(Include = "Id,Name,SupplierId,Description,Price,Amount,Color,ProductCategorieId,IsActive")]Product product, HttpPostedFileBase file)
         {
             if (!ModelState.IsValid) return View(product);
 
@@ -187,9 +188,10 @@ namespace YoavShop.Controllers
             db.Entry(product).State = EntityState.Modified;
             db.SaveChanges();
             tweetsFactory.Edit(product, oldProduct);
-            return RedirectToAction("Details", "Supplier");
+            return RedirectToAction("Index", "Home");
         }
 
+        
         // GET: Product/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -204,7 +206,7 @@ namespace YoavShop.Controllers
             }
             return View(product);
         }
-
+        
         // POST: Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

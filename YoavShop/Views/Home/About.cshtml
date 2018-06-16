@@ -75,13 +75,12 @@
         </section>
     }
     <!-- end of map-->
-
     <br />
     <div id="charts">
         <div class="barchart">
             <!-- bar chart -->
             <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-            <h4>Suppliers / Money maid</h4>
+            <h4>Suppliers by amount of money they maid</h4>
             <svg id="barChart"></svg>
             <script>
                 $.ajax({
@@ -203,8 +202,15 @@
             </script>
         </div>
         <!-- end of line chart -->
+        <div class="video">
+            <h4>Are your jewlery real?</h4>
+            <video width="300" controls>
+                <source src="~/Video/4EasyWays.mp4" type="video/mp4" style="float: right; display: flex;">
+                Your browser does not support HTML5 video.
+            </video>
+        </div>
     </div>
-    <br />
+
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBannxhtQQR-AIphU4cX0fwO_T3-XSl6e8&">
     </script>
