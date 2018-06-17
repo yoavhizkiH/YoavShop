@@ -35,6 +35,14 @@ namespace YoavShop.BL
 
             return s;
         }
+
+        public string RecommendProduct(List<Product> products, Customer user, List<Transaction> transactions)
+        {
+            var bestSellingProduct = products.Single(p => p.Id == transactions.GroupBy(t => t.ProductId).Max(b => b.Key));
+
+            return user == null ? bestSellingProduct.Name : products.Single(p => p.Id == user.Buyings.GroupBy(t => t.ProductId).Max(b => b.Key)).Name;
+        }
+
     }
 
     public class SupplierWithTransactionsModel
