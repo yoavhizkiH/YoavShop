@@ -20,11 +20,10 @@
         </header>
 
         @using (@Html.BeginForm(null, null, FormMethod.Post, new { @class = "login-form" }))
-
         {
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-            @Html.TextBoxFor(m => m.UserName, new { @class = "login-input", placeholder = "user name" })
+            @Html.TextBoxFor(m => m.UserName, new { @class = "login-input", placeholder = "User name" })
 
             @Html.PasswordFor(m => m.Password, new { @class = "login-input", placeholder = "Password" })
 
@@ -37,9 +36,11 @@
     </section>
 </div>
 <br/>
-<div class="agenda">
-    This site was created for a class in the college of management for the course application development. The perpase of this site is to connect people who wants to sell jewlery (suppliers) to people who want to buy them (costumers). In this virtual store you have to open a customer account in order to buy products, and you have to open a supplier account in order to sell. notice that the site's admin can see every every detail you enter to the site.
-</div>
+<aside>
+    <div class="agenda">
+        This site was created for a class in the college of management for the course application development. The perpase of this site is to connect people who wants to sell jewlery (suppliers) to people who want to buy them (costumers). In this virtual store you have to open a customer account in order to buy products, and you have to open a supplier account in order to sell. notice that the site's admin can see every every detail you enter to the site.
+    </div>
+</aside>
 <br/>
 <div>
     <footer>
