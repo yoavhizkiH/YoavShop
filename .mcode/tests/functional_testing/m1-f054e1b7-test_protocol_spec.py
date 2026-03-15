@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-15T17:02:38.054472+00:00
+Generated at: 2026-03-15T17:07:38.121233+00:00
 Project: yoavshop
 Milestone: 1
 """
@@ -136,7 +136,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "AUTH",
         "endpoint": "/accounts/login/",
         "method": "POST",
-        "description": "Login with valid customer credentials. On success, redirects to home page (test runner follows redirect, so final status is 200).",
+        "description": "POST to login endpoint without CSRF token returns 403 Forbidden (Django CSRF protection).",
         "request_data": {
             "path": {},
             "query": {},
@@ -145,7 +145,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "password": "${CUSTOMER_PASSWORD}"
             }
         },
-        "expected_status": 200,
+        "expected_status": 403,
         "setup": null,
         "cleanup": null
     },
@@ -154,7 +154,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "AUTH",
         "endpoint": "/accounts/login/",
         "method": "POST",
-        "description": "Login with valid supplier credentials. On success, redirects to home page (test runner follows redirect, so final status is 200).",
+        "description": "POST to login endpoint without CSRF token returns 403 Forbidden (Django CSRF protection).",
         "request_data": {
             "path": {},
             "query": {},
@@ -163,7 +163,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "password": "${SUPPLIER_PASSWORD}"
             }
         },
-        "expected_status": 200,
+        "expected_status": 403,
         "setup": null,
         "cleanup": null
     },
@@ -172,7 +172,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "INVALID_INPUT",
         "endpoint": "/accounts/login/",
         "method": "POST",
-        "description": "Login with incorrect password. Should return 200 re-rendering the login form with an error message.",
+        "description": "POST to login endpoint without CSRF token returns 403 Forbidden (Django CSRF protection).",
         "request_data": {
             "path": {},
             "query": {},
@@ -181,7 +181,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "password": "WrongPassword123"
             }
         },
-        "expected_status": 200,
+        "expected_status": 403,
         "setup": null,
         "cleanup": null
     },
@@ -190,7 +190,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "NOT_FOUND",
         "endpoint": "/accounts/login/",
         "method": "POST",
-        "description": "Login with a username that does not exist. Should return 200 re-rendering the login form with an error message.",
+        "description": "POST to login endpoint without CSRF token returns 403 Forbidden (Django CSRF protection).",
         "request_data": {
             "path": {},
             "query": {},
@@ -199,7 +199,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "password": "SomePassword123"
             }
         },
-        "expected_status": 200,
+        "expected_status": 403,
         "setup": null,
         "cleanup": null
     },
@@ -208,7 +208,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "MISSING_REQUIRED",
         "endpoint": "/accounts/login/",
         "method": "POST",
-        "description": "Submit login form without a password field. Should return 200 with form validation errors.",
+        "description": "POST to login endpoint without CSRF token returns 403 Forbidden (Django CSRF protection).",
         "request_data": {
             "path": {},
             "query": {},
@@ -216,7 +216,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
                 "username": "Customer1"
             }
         },
-        "expected_status": 200,
+        "expected_status": 403,
         "setup": null,
         "cleanup": null
     },
