@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-15T17:18:02.861621+00:00
+Generated at: 2026-03-15T17:35:49.689752+00:00
 Project: yoavshop
 Milestone: 4
 """
@@ -212,8 +212,8 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
             "path": {},
             "query": {},
             "body": {
-                "product_id": "1",
-                "customer_id": "1",
+                "product": "1",
+                "customer": "3",
                 "money_paid": "150",
                 "timestamp": "2025-06-15T10:30:00"
             }
@@ -227,7 +227,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "MISSING_REQUIRED",
         "endpoint": "/transactions/create/",
         "method": "POST",
-        "description": "Attempt to create a transaction without required fields (no product_id). Expects form returned with errors (200).",
+        "description": "Attempt to create a transaction without required fields (no product or customer). Expects form returned with errors (200).",
         "request_data": {
             "path": {},
             "query": {},
@@ -279,92 +279,50 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "category": "HAPPY_PATH",
         "endpoint": "/transactions/{id}/",
         "method": "GET",
-        "description": "Create a transaction via setup, then view its detail page. Expects 200.",
-        "setup": {
-            "endpoint": "/transactions/create/",
-            "method": "POST",
-            "body": {
-                "product_id": "1",
-                "customer_id": "1",
-                "money_paid": "200",
-                "timestamp": "2025-07-01T14:00:00"
-            },
-            "extract_id_from": "id"
-        },
+        "description": "View detail page of an existing seed data transaction (ID 1). Expects 200.",
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "1"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/transactions/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "transaction_edit_form_happy_path",
         "category": "HAPPY_PATH",
         "endpoint": "/transactions/{id}/edit/",
         "method": "GET",
-        "description": "Create a transaction via setup, then load its edit form. Expects 200 with pre-populated form.",
-        "setup": {
-            "endpoint": "/transactions/create/",
-            "method": "POST",
-            "body": {
-                "product_id": "2",
-                "customer_id": "2",
-                "money_paid": "300",
-                "timestamp": "2025-07-02T15:00:00"
-            },
-            "extract_id_from": "id"
-        },
+        "description": "Load edit form of an existing seed data transaction (ID 2). Expects 200 with pre-populated form.",
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "2"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/transactions/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "transaction_delete_happy_path",
         "category": "HAPPY_PATH",
         "endpoint": "/transactions/{id}/delete/",
         "method": "POST",
-        "description": "Create a transaction via setup, then delete it. Expects redirect to transaction index (302).",
-        "setup": {
-            "endpoint": "/transactions/create/",
-            "method": "POST",
-            "body": {
-                "product_id": "3",
-                "customer_id": "3",
-                "money_paid": "180",
-                "timestamp": "2025-07-03T11:00:00"
-            },
-            "extract_id_from": "id"
-        },
+        "description": "Delete an existing seed data transaction (ID 14). Expects redirect to transaction index (302).",
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "14"
             },
             "query": {},
             "body": {}
         },
         "expected_status": 302,
+        "setup": null,
         "cleanup": null
     },
     {
@@ -386,10 +344,10 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     },
     {
         "name": "buy_product_not_found",
-        "category": "NOT_FOUND",
+        "category": "AUTH",
         "endpoint": "/buy/{product_id}/",
         "method": "GET",
-        "description": "Attempt to buy a non-existent product. Expects 404.",
+        "description": "Attempt to buy a non-existent product without authentication. The buy endpoint checks customer auth first, so unauthenticated requests are redirected to login (302) before the product lookup occurs.",
         "request_data": {
             "path": {
                 "product_id": "99999"
@@ -397,7 +355,7 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
             "query": {},
             "body": null
         },
-        "expected_status": 404,
+        "expected_status": 302,
         "setup": null,
         "cleanup": null
     },
@@ -501,8 +459,8 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
 )
 
 # Base URL for API requests (from app discovery, includes host:port)
-BASE_URL = os.path.expandvars("")
-HEALTH_CHECK_ENDPOINT = os.path.expandvars("")
+BASE_URL = os.path.expandvars("http://localhost:8000")
+HEALTH_CHECK_ENDPOINT = os.path.expandvars("/")
 REQUEST_TIMEOUT = 30
 HEALTH_CHECK_URL = f"{BASE_URL.rstrip('/')}/{HEALTH_CHECK_ENDPOINT.lstrip('/')}"
 # Per-endpoint routing table for microservices DST
