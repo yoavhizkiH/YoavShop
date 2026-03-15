@@ -9,7 +9,7 @@ This script supports two modes:
 1. SRC Validation: Tests endpoints and captures responses (no expected_response)
 2. DST Contract Validation: Tests endpoints and validates responses match expected (has expected_response)
 
-Generated at: 2026-03-15T19:23:24.962072+00:00
+Generated at: 2026-03-15T19:54:47.058256+00:00
 Project: yoavshop
 Milestone: 3
 """
@@ -51,83 +51,11 @@ def resolve_env_placeholders(obj: Any) -> Any:
 TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     json.loads(r'''[
     {
-        "name": "customer_create_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/customers/create/",
-        "method": "POST",
-        "description": "Register a new customer with all valid fields and verify redirect on success",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "jdoe",
-                "password1": "${CUSTOMER_CREATE_PASSWORD}",
-                "password2": "${CUSTOMER_CREATE_PASSWORD}",
-                "first_name": "John",
-                "last_name": "Doe",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 6
-            }
-        },
-        "expected_status": 302,
-        "setup": null,
-        "cleanup": null
-    },
-    {
-        "name": "customer_create_missing_required_username",
-        "category": "MISSING_REQUIRED",
-        "endpoint": "/accounts/customers/create/",
-        "method": "POST",
-        "description": "Attempt to register a customer without a username, expect form re-render with validation errors",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "",
-                "password1": "${CUSTOMER_MISSING_REQ_PASSWORD}",
-                "password2": "${CUSTOMER_MISSING_REQ_PASSWORD}",
-                "first_name": "Jane",
-                "last_name": "Smith",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 3
-            }
-        },
-        "expected_status": 200,
-        "setup": null,
-        "cleanup": null
-    },
-    {
-        "name": "customer_create_password_mismatch",
-        "category": "INVALID_INPUT",
-        "endpoint": "/accounts/customers/create/",
-        "method": "POST",
-        "description": "Attempt to register a customer with mismatched passwords, expect form re-render with errors",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "mismatch1",
-                "password1": "${CUSTOMER_PW_MISMATCH_P1}",
-                "password2": "DifferentPass456!",
-                "first_name": "Test",
-                "last_name": "User",
-                "card_number": "4111111111111111",
-                "expiration_year": 2025,
-                "expiration_month": 9
-            }
-        },
-        "expected_status": 200,
-        "setup": null,
-        "cleanup": null
-    },
-    {
         "name": "customer_index_happy_path",
         "category": "HAPPY_PATH",
+        "description": "Load the customer index page. Should return 200 with HTML containing customer list table with search, sort, and pagination.",
         "endpoint": "/accounts/customers/",
         "method": "GET",
-        "description": "Retrieve the customer list page, verify it returns HTML successfully",
         "request_data": {
             "path": {},
             "query": {},
@@ -140,13 +68,13 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "customer_index_search",
         "category": "HAPPY_PATH",
+        "description": "Search customers by name. The searchString parameter filters by FirstName, LastName, or UserName.",
         "endpoint": "/accounts/customers/",
         "method": "GET",
-        "description": "Search the customer list by name, verify 200 response",
         "request_data": {
             "path": {},
             "query": {
-                "searchString": "John"
+                "searchString": "Customer1"
             },
             "body": null
         },
@@ -157,15 +85,30 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "customer_index_sort_and_paginate",
         "category": "HAPPY_PATH",
+        "description": "Sort customers by LastName ascending and request page 2. Page size is 3 items per page.",
         "endpoint": "/accounts/customers/",
         "method": "GET",
-        "description": "Sort customers by last name descending and request page 1",
         "request_data": {
             "path": {},
             "query": {
-                "sortOrder": "LastName_desc",
-                "page": "1"
+                "sortOrder": "LastName",
+                "page": "2"
             },
+            "body": null
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "customer_create_form_get",
+        "category": "HAPPY_PATH",
+        "description": "Load the customer registration form. Should return 200 with HTML form containing fields for username, password, name, and credit card.",
+        "endpoint": "/accounts/customers/create/",
+        "method": "GET",
+        "request_data": {
+            "path": {},
+            "query": {},
             "body": null
         },
         "expected_status": 200,
@@ -175,46 +118,26 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "customer_detail_happy_path",
         "category": "HAPPY_PATH",
+        "description": "View details for an existing customer (Customer1, User ID 3). Should return 200 with customer profile information.",
         "endpoint": "/accounts/customers/{id}/",
         "method": "GET",
-        "description": "Create a customer, then view their detail page, then clean up",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "detcust1",
-                "password1": "${CUSTOMER_DETAIL_PASSWORD}",
-                "password2": "${CUSTOMER_DETAIL_PASSWORD}",
-                "first_name": "Detail",
-                "last_name": "Customer",
-                "card_number": "5500000000000004",
-                "expiration_year": 2027,
-                "expiration_month": 11
-            },
-            "extract_id_from": "id"
-        },
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "3"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/accounts/customers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "customer_detail_not_found",
         "category": "NOT_FOUND",
+        "description": "Request details for a non-existent customer. Should return 404.",
         "endpoint": "/accounts/customers/{id}/",
         "method": "GET",
-        "description": "Request details for a non-existent customer ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -229,90 +152,26 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "customer_edit_form_happy_path",
         "category": "HAPPY_PATH",
+        "description": "Load the edit form for an existing customer (Customer1, User ID 3). Should return 200 with pre-populated form.",
         "endpoint": "/accounts/customers/{id}/edit/",
         "method": "GET",
-        "description": "Create a customer, then load their edit form, then clean up",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "editcust1",
-                "password1": "${CUSTOMER_EDIT_FORM_PASSWORD}",
-                "password2": "${CUSTOMER_EDIT_FORM_PASSWORD}",
-                "first_name": "EditForm",
-                "last_name": "Customer",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 5
-            },
-            "extract_id_from": "id"
-        },
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "3"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/accounts/customers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
-    },
-    {
-        "name": "customer_edit_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/customers/{id}/edit/",
-        "method": "POST",
-        "description": "Create a customer, edit their name, verify redirect on success, then clean up",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "editcust2",
-                "password1": "${CUSTOMER_EDIT_PASSWORD}",
-                "password2": "${CUSTOMER_EDIT_PASSWORD}",
-                "first_name": "Before",
-                "last_name": "Edit",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 8
-            },
-            "extract_id_from": "id"
-        },
-        "request_data": {
-            "path": {
-                "id": "$setup_id"
-            },
-            "query": {},
-            "body": {
-                "first_name": "After",
-                "last_name": "Edit",
-                "username": "editcust2",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 8
-            }
-        },
-        "expected_status": 302,
-        "cleanup": {
-            "endpoint": "/accounts/customers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "customer_edit_not_found",
         "category": "NOT_FOUND",
+        "description": "Request edit form for a non-existent customer. Should return 404.",
         "endpoint": "/accounts/customers/{id}/edit/",
         "method": "GET",
-        "description": "Request edit form for a non-existent customer ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -327,77 +186,26 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "customer_delete_confirm_happy_path",
         "category": "HAPPY_PATH",
+        "description": "Load the delete confirmation page for an existing customer (Customer14, User ID 29). Should return 200 with confirmation form.",
         "endpoint": "/accounts/customers/{id}/delete/",
         "method": "GET",
-        "description": "Create a customer, load the delete confirmation page, then clean up",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "delcust1",
-                "password1": "${CUSTOMER_DELETE_CONFIRM_PASSWORD}",
-                "password2": "${CUSTOMER_DELETE_CONFIRM_PASSWORD}",
-                "first_name": "Delete",
-                "last_name": "Confirm",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 4
-            },
-            "extract_id_from": "id"
-        },
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "29"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/accounts/customers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
-    },
-    {
-        "name": "customer_delete_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/customers/{id}/delete/",
-        "method": "POST",
-        "description": "Create a customer then delete them, verify redirect on success",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "delcust2",
-                "password1": "${CUSTOMER_DELETE_PASSWORD}",
-                "password2": "${CUSTOMER_DELETE_PASSWORD}",
-                "first_name": "ToDelete",
-                "last_name": "Customer",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 7
-            },
-            "extract_id_from": "id"
-        },
-        "request_data": {
-            "path": {
-                "id": "$setup_id"
-            },
-            "query": {},
-            "body": null
-        },
-        "expected_status": 302,
+        "setup": null,
         "cleanup": null
     },
     {
         "name": "customer_delete_not_found",
         "category": "NOT_FOUND",
+        "description": "Request delete confirmation for a non-existent customer. Should return 404.",
         "endpoint": "/accounts/customers/{id}/delete/",
         "method": "GET",
-        "description": "Request delete confirmation for a non-existent customer ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -410,83 +218,11 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "cleanup": null
     },
     {
-        "name": "supplier_create_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/suppliers/create/",
-        "method": "POST",
-        "description": "Register a new supplier with all valid fields and verify redirect on success",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "suppl1",
-                "password1": "${SUPPLIER_CREATE_PASSWORD}",
-                "password2": "${SUPPLIER_CREATE_PASSWORD}",
-                "first_name": "Alice",
-                "last_name": "Supplier",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 10
-            }
-        },
-        "expected_status": 302,
-        "setup": null,
-        "cleanup": null
-    },
-    {
-        "name": "supplier_create_missing_required_password",
-        "category": "MISSING_REQUIRED",
-        "endpoint": "/accounts/suppliers/create/",
-        "method": "POST",
-        "description": "Attempt to register a supplier without a password, expect form re-render with errors",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "nopasssup",
-                "password1": "",
-                "password2": "",
-                "first_name": "No",
-                "last_name": "Password",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 2
-            }
-        },
-        "expected_status": 200,
-        "setup": null,
-        "cleanup": null
-    },
-    {
-        "name": "supplier_create_username_too_long",
-        "category": "BOUNDARY",
-        "endpoint": "/accounts/suppliers/create/",
-        "method": "POST",
-        "description": "Attempt to register a supplier with a username exceeding the 10-character max, expect form error",
-        "request_data": {
-            "path": {},
-            "query": {},
-            "body": {
-                "username": "verylongusername",
-                "password1": "${SUPPLIER_LONG_USER_PASSWORD}",
-                "password2": "${SUPPLIER_LONG_USER_PASSWORD}",
-                "first_name": "Long",
-                "last_name": "Username",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 1
-            }
-        },
-        "expected_status": 200,
-        "setup": null,
-        "cleanup": null
-    },
-    {
         "name": "supplier_index_happy_path",
         "category": "HAPPY_PATH",
+        "description": "Load the supplier index page. Should return 200 with HTML containing supplier list table.",
         "endpoint": "/accounts/suppliers/",
         "method": "GET",
-        "description": "Retrieve the supplier list page, verify it returns HTML successfully",
         "request_data": {
             "path": {},
             "query": {},
@@ -499,13 +235,13 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "supplier_index_search_and_sort",
         "category": "HAPPY_PATH",
+        "description": "Search suppliers by name and sort by UserName ascending.",
         "endpoint": "/accounts/suppliers/",
         "method": "GET",
-        "description": "Search suppliers by username and sort by UserName ascending",
         "request_data": {
             "path": {},
             "query": {
-                "searchString": "Alice",
+                "searchString": "Supplier",
                 "sortOrder": "UserName"
             },
             "body": null
@@ -515,48 +251,43 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "cleanup": null
     },
     {
+        "name": "supplier_create_form_get",
+        "category": "HAPPY_PATH",
+        "description": "Load the supplier registration form. Should return 200 with HTML form.",
+        "endpoint": "/accounts/suppliers/create/",
+        "method": "GET",
+        "request_data": {
+            "path": {},
+            "query": {},
+            "body": null
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
         "name": "supplier_detail_happy_path",
         "category": "HAPPY_PATH",
+        "description": "View details for an existing supplier (Supplier1, User ID 2). Should return 200 with supplier info, products table, and sellings table.",
         "endpoint": "/accounts/suppliers/{id}/",
         "method": "GET",
-        "description": "Create a supplier, then view their detail page with product and sellings sections, then clean up",
-        "setup": {
-            "endpoint": "/accounts/suppliers/create/",
-            "method": "POST",
-            "body": {
-                "username": "detsup1",
-                "password1": "${SUPPLIER_DETAIL_PASSWORD}",
-                "password2": "${SUPPLIER_DETAIL_PASSWORD}",
-                "first_name": "Detail",
-                "last_name": "Supplier",
-                "card_number": "5500000000000004",
-                "expiration_year": 2027,
-                "expiration_month": 3
-            },
-            "extract_id_from": "id"
-        },
         "request_data": {
             "path": {
-                "id": "$setup_id"
+                "id": "2"
             },
             "query": {},
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/accounts/suppliers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "supplier_detail_not_found",
         "category": "NOT_FOUND",
+        "description": "Request details for a non-existent supplier. Should return 404.",
         "endpoint": "/accounts/suppliers/{id}/",
         "method": "GET",
-        "description": "Request details for a non-existent supplier ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -567,57 +298,13 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "expected_status": 404,
         "setup": null,
         "cleanup": null
-    },
-    {
-        "name": "supplier_edit_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/suppliers/{id}/edit/",
-        "method": "POST",
-        "description": "Create a supplier, edit their first name, verify redirect on success, then clean up",
-        "setup": {
-            "endpoint": "/accounts/suppliers/create/",
-            "method": "POST",
-            "body": {
-                "username": "editsup1",
-                "password1": "${SUPPLIER_EDIT_PASSWORD}",
-                "password2": "${SUPPLIER_EDIT_PASSWORD}",
-                "first_name": "Before",
-                "last_name": "SupEdit",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 6
-            },
-            "extract_id_from": "id"
-        },
-        "request_data": {
-            "path": {
-                "id": "$setup_id"
-            },
-            "query": {},
-            "body": {
-                "first_name": "After",
-                "last_name": "SupEdit",
-                "username": "editsup1",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 6
-            }
-        },
-        "expected_status": 302,
-        "cleanup": {
-            "endpoint": "/accounts/suppliers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
     },
     {
         "name": "supplier_edit_not_found",
         "category": "NOT_FOUND",
+        "description": "Request edit form for a non-existent supplier. Should return 404.",
         "endpoint": "/accounts/suppliers/{id}/edit/",
         "method": "GET",
-        "description": "Request edit form for a non-existent supplier ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -627,45 +314,14 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         },
         "expected_status": 404,
         "setup": null,
-        "cleanup": null
-    },
-    {
-        "name": "supplier_delete_happy_path",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/suppliers/{id}/delete/",
-        "method": "POST",
-        "description": "Create a supplier then delete them, verify redirect on success",
-        "setup": {
-            "endpoint": "/accounts/suppliers/create/",
-            "method": "POST",
-            "body": {
-                "username": "delsup1",
-                "password1": "${SUPPLIER_DELETE_PASSWORD}",
-                "password2": "${SUPPLIER_DELETE_PASSWORD}",
-                "first_name": "ToDelete",
-                "last_name": "Supplier",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 5
-            },
-            "extract_id_from": "id"
-        },
-        "request_data": {
-            "path": {
-                "id": "$setup_id"
-            },
-            "query": {},
-            "body": null
-        },
-        "expected_status": 302,
         "cleanup": null
     },
     {
         "name": "supplier_delete_not_found",
         "category": "NOT_FOUND",
+        "description": "Request delete confirmation for a non-existent supplier. Should return 404.",
         "endpoint": "/accounts/suppliers/{id}/delete/",
         "method": "GET",
-        "description": "Request delete confirmation for a non-existent supplier ID, expect 404",
         "request_data": {
             "path": {
                 "id": "99999"
@@ -680,63 +336,49 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     {
         "name": "check_username_available",
         "category": "HAPPY_PATH",
+        "description": "Check availability of a username that does not exist. Should return JSON with available=true.",
         "endpoint": "/accounts/check-username/",
         "method": "GET",
-        "description": "Check availability of a username that does not exist, expect available=true",
         "request_data": {
             "path": {},
             "query": {
-                "username": "newuser99"
+                "username": "newuserxyz"
             },
             "body": null
         },
         "expected_status": 200,
+        "expected_response": {
+            "available": true
+        },
         "setup": null,
         "cleanup": null
     },
     {
         "name": "check_username_taken",
         "category": "HAPPY_PATH",
+        "description": "Check availability of an existing username (Customer1). Should return JSON with available=false.",
         "endpoint": "/accounts/check-username/",
         "method": "GET",
-        "description": "Create a customer, then check their username is reported as taken, then clean up",
-        "setup": {
-            "endpoint": "/accounts/customers/create/",
-            "method": "POST",
-            "body": {
-                "username": "taken1",
-                "password1": "${CHECK_USERNAME_TAKEN_PASSWORD}",
-                "password2": "${CHECK_USERNAME_TAKEN_PASSWORD}",
-                "first_name": "Taken",
-                "last_name": "User",
-                "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 9
-            },
-            "extract_id_from": "id"
-        },
         "request_data": {
             "path": {},
             "query": {
-                "username": "taken1"
+                "username": "Customer1"
             },
             "body": null
         },
         "expected_status": 200,
-        "cleanup": {
-            "endpoint": "/accounts/customers/{id}/delete/",
-            "method": "POST",
-            "path": {
-                "id": "$setup_id"
-            }
-        }
+        "expected_response": {
+            "available": false
+        },
+        "setup": null,
+        "cleanup": null
     },
     {
         "name": "check_username_missing_param",
         "category": "MISSING_REQUIRED",
+        "description": "Call check-username endpoint without the required username parameter. Should return 400.",
         "endpoint": "/accounts/check-username/",
         "method": "GET",
-        "description": "Call the username check endpoint without the username parameter, expect 400",
         "request_data": {
             "path": {},
             "query": {},
@@ -747,30 +389,68 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
         "cleanup": null
     },
     {
-        "name": "customer_create_form_get",
+        "name": "customer_create_happy_path",
         "category": "HAPPY_PATH",
+        "description": "Create a new customer via form submission. Should succeed and return 200 (after redirect to home page).",
         "endpoint": "/accounts/customers/create/",
-        "method": "GET",
-        "description": "Load the customer registration form page, verify 200 HTML response",
+        "method": "POST",
         "request_data": {
             "path": {},
             "query": {},
-            "body": null
+            "body": {
+                "username": "testcust1",
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
+                "last_name": "CustomerNew",
+                "card_number": "4111111111111111",
+                "expiration_year": "2025",
+                "expiration_month": "6"
+            },
+            "content_type": "form"
         },
         "expected_status": 200,
         "setup": null,
         "cleanup": null
     },
     {
-        "name": "supplier_create_form_get",
-        "category": "HAPPY_PATH",
-        "endpoint": "/accounts/suppliers/create/",
-        "method": "GET",
-        "description": "Load the supplier registration form page, verify 200 HTML response",
+        "name": "customer_create_missing_required_username",
+        "category": "MISSING_REQUIRED",
+        "description": "Submit customer registration without username field. Form validation should fail and re-render the form (200).",
+        "endpoint": "/accounts/customers/create/",
+        "method": "POST",
         "request_data": {
             "path": {},
             "query": {},
-            "body": null
+            "body": {
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
+                "last_name": "Customer"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "customer_create_password_mismatch",
+        "category": "INVALID_INPUT",
+        "description": "Submit customer registration with mismatched passwords. Form validation should fail and re-render (200).",
+        "endpoint": "/accounts/customers/create/",
+        "method": "POST",
+        "request_data": {
+            "path": {},
+            "query": {},
+            "body": {
+                "username": "testmatch",
+                "password1": "TestPass123!",
+                "password2": "DifferentPass456!",
+                "first_name": "Test",
+                "last_name": "Mismatch"
+            },
+            "content_type": "form"
         },
         "expected_status": 200,
         "setup": null,
@@ -778,23 +458,24 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     },
     {
         "name": "customer_create_invalid_expiration_year",
-        "category": "BOUNDARY",
+        "category": "INVALID_INPUT",
+        "description": "Submit customer registration with expiration year out of valid range (2018-2028). Form validation should fail (200).",
         "endpoint": "/accounts/customers/create/",
         "method": "POST",
-        "description": "Attempt to register a customer with an out-of-range expiration year (2030), expect form error",
         "request_data": {
             "path": {},
             "query": {},
             "body": {
-                "username": "badyear1",
-                "password1": "${CUSTOMER_BADYEAR_PASSWORD}",
-                "password2": "${CUSTOMER_BADYEAR_PASSWORD}",
-                "first_name": "Bad",
+                "username": "testyear",
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
                 "last_name": "Year",
                 "card_number": "4111111111111111",
-                "expiration_year": 2030,
-                "expiration_month": 6
-            }
+                "expiration_year": "2099",
+                "expiration_month": "6"
+            },
+            "content_type": "form"
         },
         "expected_status": 200,
         "setup": null,
@@ -802,23 +483,175 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
     },
     {
         "name": "customer_create_invalid_expiration_month",
-        "category": "BOUNDARY",
+        "category": "INVALID_INPUT",
+        "description": "Submit customer registration with expiration month out of valid range (1-12). Form validation should fail (200).",
         "endpoint": "/accounts/customers/create/",
         "method": "POST",
-        "description": "Attempt to register a customer with an out-of-range expiration month (13), expect form error",
         "request_data": {
             "path": {},
             "query": {},
             "body": {
-                "username": "badmon1",
-                "password1": "${CUSTOMER_BADMON_PASSWORD}",
-                "password2": "${CUSTOMER_BADMON_PASSWORD}",
-                "first_name": "Bad",
+                "username": "testmonth",
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
                 "last_name": "Month",
                 "card_number": "4111111111111111",
-                "expiration_year": 2026,
-                "expiration_month": 13
-            }
+                "expiration_year": "2025",
+                "expiration_month": "13"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "supplier_create_happy_path",
+        "category": "HAPPY_PATH",
+        "description": "Create a new supplier via form submission. Should succeed and return 200 (after redirect to home page).",
+        "endpoint": "/accounts/suppliers/create/",
+        "method": "POST",
+        "request_data": {
+            "path": {},
+            "query": {},
+            "body": {
+                "username": "testsupp1",
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
+                "last_name": "SupplierNew",
+                "card_number": "4111111111111111",
+                "expiration_year": "2025",
+                "expiration_month": "6"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "supplier_create_missing_required_password",
+        "category": "MISSING_REQUIRED",
+        "description": "Submit supplier registration without password fields. Form validation should fail and re-render (200).",
+        "endpoint": "/accounts/suppliers/create/",
+        "method": "POST",
+        "request_data": {
+            "path": {},
+            "query": {},
+            "body": {
+                "username": "testsupp2",
+                "first_name": "Test",
+                "last_name": "Supplier"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "supplier_create_username_too_long",
+        "category": "INVALID_INPUT",
+        "description": "Submit supplier registration with username exceeding 10 character limit. Form validation should fail (200).",
+        "endpoint": "/accounts/suppliers/create/",
+        "method": "POST",
+        "request_data": {
+            "path": {},
+            "query": {},
+            "body": {
+                "username": "verylongusername",
+                "password1": "TestPass123!",
+                "password2": "TestPass123!",
+                "first_name": "Test",
+                "last_name": "TooLong"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "customer_edit_happy_path",
+        "category": "HAPPY_PATH",
+        "description": "Submit edit form for an existing customer (Customer2, User ID 5). Should succeed and return 200 (after redirect).",
+        "endpoint": "/accounts/customers/{id}/edit/",
+        "method": "POST",
+        "request_data": {
+            "path": {
+                "id": "5"
+            },
+            "query": {},
+            "body": {
+                "first_name": "UpdatedFirst",
+                "last_name": "UpdatedLast",
+                "card_number": "4111111111111111",
+                "expiration_year": "2025",
+                "expiration_month": "6"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "supplier_edit_happy_path",
+        "category": "HAPPY_PATH",
+        "description": "Submit edit form for an existing supplier (Supplier2, User ID 4). Should succeed and return 200 (after redirect).",
+        "endpoint": "/accounts/suppliers/{id}/edit/",
+        "method": "POST",
+        "request_data": {
+            "path": {
+                "id": "4"
+            },
+            "query": {},
+            "body": {
+                "first_name": "UpdatedFirst",
+                "last_name": "UpdatedLast",
+                "card_number": "4111111111111111",
+                "expiration_year": "2025",
+                "expiration_month": "6"
+            },
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "customer_delete_happy_path",
+        "category": "HAPPY_PATH",
+        "description": "Delete an existing customer (Customer14, User ID 29) via POST. Should succeed and return 200 (after redirect to index).",
+        "endpoint": "/accounts/customers/{id}/delete/",
+        "method": "POST",
+        "request_data": {
+            "path": {
+                "id": "29"
+            },
+            "query": {},
+            "body": {},
+            "content_type": "form"
+        },
+        "expected_status": 200,
+        "setup": null,
+        "cleanup": null
+    },
+    {
+        "name": "supplier_delete_happy_path",
+        "category": "HAPPY_PATH",
+        "description": "Delete an existing supplier (Supplier14, User ID 28) via POST. Should succeed and return 200 (after redirect to index).",
+        "endpoint": "/accounts/suppliers/{id}/delete/",
+        "method": "POST",
+        "request_data": {
+            "path": {
+                "id": "28"
+            },
+            "query": {},
+            "body": {},
+            "content_type": "form"
         },
         "expected_status": 200,
         "setup": null,
@@ -828,8 +661,8 @@ TEST_CASES: list[dict[str, Any]] = resolve_env_placeholders(
 )
 
 # Base URL for API requests (from app discovery, includes host:port)
-BASE_URL = os.path.expandvars("")
-HEALTH_CHECK_ENDPOINT = os.path.expandvars("")
+BASE_URL = os.path.expandvars("http://localhost:8000")
+HEALTH_CHECK_ENDPOINT = os.path.expandvars("/")
 REQUEST_TIMEOUT = 30
 HEALTH_CHECK_URL = f"{BASE_URL.rstrip('/')}/{HEALTH_CHECK_ENDPOINT.lstrip('/')}"
 # Per-endpoint routing table for microservices DST
